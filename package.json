@@ -6,7 +6,7 @@
   "main": "/spiel",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
+    "build": "vite build --base=/spiel",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
