@@ -126,6 +126,17 @@
     // simulate a click on the link to open the file dialog
     link.click();
   }
+
+  function formatDate(date: string) {
+    const tempDate = new Date(date);
+    return `${
+      ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"][tempDate.getDay()]
+    }, ${tempDate.toLocaleDateString()}`;
+  }
+
+  function getTeamNameById(id: string) {
+    return teams.find((team) => team.Id === id).Name;
+  }
 </script>
 
 <svelte:window
@@ -136,10 +147,51 @@
   }}
 />
 
+<div class="print">
+  <h1 id="title">{data.title}</h1>
+  <div id="info">
+    <p>Spieltag am {formatDate(data.date)}, {data.startTime} Uhr</p>
+    <ul id="location">
+      {#each data.location.split("\n") as line}
+        <li>{line}</li>
+      {/each}
+    </ul>
+    <p>
+      <span id="chief">Chief-Kommisär: {data.chiefReferee}</span><span
+        id="referees">Kommisär: {data.referee}</span
+      >
+    </p>
+    <p id="duration">Spielzeit: {data.duration} Minuten</p>
+    <div id="notPlaying" class="row">
+      <div class="col-2">Spielfrei:</div>
+      <div class="col-2">
+        <ul>
+          {#each data.notPlaying.split("\n") as line}
+            <li>{line}</li>
+          {/each}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <section>
+    <table>
+      {#each list as match, i}
+        <tr>
+          <td>{i + 1}.</td>
+          <td>{getTeamNameById(match.Team1Id)}</td>
+          <td>-</td>
+          <td>{getTeamNameById(match.Team2Id)}</td>
+          <td>( {match.HalfTimeScoreTeam1} : {match.HalfTimeScoreTeam2} )</td>
+          <td>{match.HalfTimeScoreTeam1} : {match.HalfTimeScoreTeam2}</td>
+          <td>{match.Referee}</td>
+        </tr>
+      {/each}
+    </table>
+  </section>
+</div>
+
 <main>
   <div class="container my-4">
-    <h1>{data.title}</h1>
-
     <Accordion
       bind:data
       bind:teams

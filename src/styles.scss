@@ -1,3 +1,55 @@
 // Import all of Bootstrap's CSS
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
-@import "./../node_modules/bootstrap-icons/font/bootstrap-icons.css"
+@import "./../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+
+@media screen {
+    .print {
+        display: none;
+    }
+}
+
+@media print {
+    .print {
+        display: block;
+
+        #title {
+            text-align: center;
+        }
+
+        #info {
+            border-top: 3px solid black;
+            border-bottom: 3px solid black;
+
+            padding-bottom: 20px;
+
+            #location {
+                li {
+                    list-style-type: none;
+                }
+            }
+
+            #chief {
+                font-weight: bold;
+            }
+
+            #referees {
+                margin-left: 20px;
+            }
+
+            #duration {
+                text-align: right;
+            }
+
+            #notPlaying {
+                li {
+                    list-style-type: none;
+                }
+            }
+        }
+    }
+
+    main {
+        display: none;
+    }
+}
