@@ -41,21 +41,66 @@
   <div class="collapse" id={`collapseTeam${i}`}>
     <div class="input-group input-group-sm mb-3">
       <span class="input-group-text">Spieler 1</span>
-      <input type="text" class="form-control" placeholder="Vorname" />
-      <input type="text" class="form-control" placeholder="Nachname" />
-      <input type="text" class="form-control" placeholder="Lizenz" />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Vorname"
+        bind:value={team.Player1.firstName}
+      />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Nachname"
+        bind:value={team.Player1.lastName}
+      />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Lizenz"
+        bind:value={team.Player1.licence}
+      />
     </div>
     <div class="input-group input-group-sm mb-3">
       <span class="input-group-text">Spieler 2</span>
-      <input type="text" class="form-control" placeholder="Vorname" />
-      <input type="text" class="form-control" placeholder="Nachname" />
-      <input type="text" class="form-control" placeholder="Lizenz" />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Vorname"
+        bind:value={team.Player2.firstName}
+      />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Nachname"
+        bind:value={team.Player2.lastName}
+      />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Lizenz"
+        bind:value={team.Player2.licence}
+      />
     </div>
     <div class="input-group input-group-sm mb-3">
       <span class="input-group-text">Spieler 3</span>
-      <input type="text" class="form-control" placeholder="Vorname" />
-      <input type="text" class="form-control" placeholder="Nachname" />
-      <input type="text" class="form-control" placeholder="Lizenz" />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Vorname"
+        bind:value={team.Player3.firstName}
+      />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Nachname"
+        bind:value={team.Player3.lastName}
+      />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Lizenz"
+        bind:value={team.Player3.licence}
+      />
     </div>
 
     <button class="btn btn-danger mb-3 w-100" on:click={() => removeTeam(i)}

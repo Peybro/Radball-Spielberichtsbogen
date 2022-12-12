@@ -21,6 +21,10 @@ export default class Match {
     return this.id;
   }
 
+  set Id(id: string) {
+    this.id = id;
+  }
+
   get Referee() {
     return this.referee;
   }
@@ -81,5 +85,18 @@ export default class Match {
 
   set FinalScoreTeam2(goalsTeam2: number) {
     this.finalScoreTeam2 = goalsTeam2;
+  }
+
+  toObject() {
+    return {
+      id: this.id,
+      team1Id: this.team1Id,
+      team2Id: this.team2Id,
+      referee: this.referee,
+      halfTimeScoreTeam1: this.halfTimeScoreTeam1,
+      halfTimeScoreTeam2: this.halfTimeScoreTeam2,
+      finalScoreTeam1: this.finalScoreTeam1,
+      finalScoreTeam2: this.finalScoreTeam2,
+    };
   }
 }

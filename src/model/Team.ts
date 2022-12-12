@@ -18,6 +18,10 @@ export default class Team {
     return this.id;
   }
 
+  set Id(id: string) {
+    this.id = id;
+  }
+
   get Name() {
     return this.name;
   }
@@ -50,12 +54,25 @@ export default class Team {
     this.player3 = player3;
   }
 
-  toString() {
+  toObject() {
     return {
+      id: this.id,
       name: this.name,
-      player1: this.player1,
-      player2: this.player2,
-      player3: this.player3,
+      player1: {
+        firstName: this.player1.firstName,
+        lastName: this.player1.lastName,
+        licence: this.player1.licence,
+      },
+      player2: {
+        firstName: this.player2.firstName,
+        lastName: this.player2.lastName,
+        licence: this.player2.licence,
+      },
+      player3: {
+        firstName: this.player3.firstName,
+        lastName: this.player3.lastName,
+        licence: this.player3.licence,
+      },
     };
   }
 }

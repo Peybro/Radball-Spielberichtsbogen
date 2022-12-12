@@ -1,35 +1,16 @@
 <script>
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+
   import Header from "./Header.svelte";
   import Teams from "./Teams.svelte";
   import Order from "./Order.svelte";
   import Table from "./Table.svelte";
-  import Match from "../model/Match";
 
   export let data;
   export let teams;
-
-  let list = [];
-
-  function createMatches() {
-    list = combinations(teams);
-  }
-
-  function combinations(arr) {
-    const result = [];
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = i + 1; j < arr.length; j++) {
-        result.push(new Match(arr[i].Id, arr[j].Id));
-      }
-    }
-    return result;
-  }
-
-  /**
-   * @param {string} matchId
-   */
-  function removeMatch(matchId) {
-    list = list.filter((match) => match.Id !== matchId);
-  }
+  export let list;
 </script>
 
 <div class="accordion" id="main-accordion">
@@ -65,7 +46,7 @@
     <div id="collapseTeams" class="accordion-collapse collapse show">
       <!-- {data-bs-parent="#main-accordion"} -->
       <div class="accordion-body">
-        <Teams bind:teams on:createMatches={() => createMatches()} />
+        <Teams bind:teams on:createMatches={() => dispatch("createMatches")} />
       </div>
     </div>
   </div>
@@ -86,7 +67,8 @@
         <Order
           {teams}
           bind:list
-          on:removeMatch={(e) => removeMatch(e.detail.matchId)}
+          on:removeMatch={(e) =>
+            dispatch("removeMatch", { matchId: e.detail.matchId })}
         />
       </div>
     </div>
