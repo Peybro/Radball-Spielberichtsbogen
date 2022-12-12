@@ -57,7 +57,7 @@
 <button
   class="btn btn-outline-danger"
   data-bs-toggle="collapse"
-  data-bs-target="#editMatches">Spiele entfernen</button
+  data-bs-target="#editMatches">einzelne Spiele entfernen</button
 >
 
 <hr />
