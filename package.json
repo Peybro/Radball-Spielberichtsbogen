@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "/spiel",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
@@ -13,6 +14,7 @@
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "@tsconfig/svelte": "^3.0.0",
+    "@types/bootstrap": "^5.2.6",
     "@types/uuid": "^9.0.0",
     "sass": "^1.56.2",
     "svelte": "^3.54.0",
