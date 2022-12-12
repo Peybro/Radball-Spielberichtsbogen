@@ -1,5 +1,6 @@
 <script lang="ts">
   import Accordion from "./lib/Accordion.svelte";
+  import Print from "./lib/Print.svelte";
   import Match from "./model/Match";
   import Team from "./model/Team";
 
@@ -136,10 +137,10 @@
   }}
 />
 
+<Print {data} {teams} {list} />
+
 <main>
   <div class="container my-4">
-    <h1>{data.title}</h1>
-
     <Accordion
       bind:data
       bind:teams
@@ -154,6 +155,13 @@
       <button class="btn btn-primary" on:click={() => exportData()}
         >Export</button
       >
+      <button class="btn btn-primary" on:click={() => window.print()}>
+        Drucken
+      </button>
+      <div class="mt-2">
+        Wähle als Drucker "Microsoft Print to PDF" um das Dokument als PDF zu
+        speichern.
+      </div>
     </div>
   </div>
 </main>
