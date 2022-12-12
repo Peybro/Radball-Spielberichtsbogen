@@ -39,8 +39,8 @@
   });
 
   $: sortedResult = [...result]
-    .sort((a, b) => b.Points - a.Points)
-    .sort((a, b) => b.Difference - a.Difference);
+    .sort((a, b) => b.Difference - a.Difference)
+    .sort((a, b) => b.Points - a.Points);
 </script>
 
 <div class="table-responsive">

@@ -31,7 +31,9 @@
     return result;
   }
 
-  function removeMatch(matchId) {
+  function removeMatch(matchId: string) {
+    console.log(matchId);
+
     list = list.filter((match) => match.Id !== matchId);
   }
 
@@ -89,7 +91,7 @@
               newMatch.HalfTimeScoreTeam1 = match.halfTimeScoreTeam1;
               newMatch.HalfTimeScoreTeam2 = match.halfTimeScoreTeam2;
               newMatch.FinalScoreTeam1 = match.finalScoreTeam1;
-              newMatch.FinalScoreTeam1 = match.finalScoreTeam1;
+              newMatch.FinalScoreTeam2 = match.finalScoreTeam2;
 
               list = [...list, newMatch];
             });
@@ -141,7 +143,7 @@
       bind:teams
       bind:list
       on:createMatches={() => createMatches()}
-      on:removeMatch={(matchId) => removeMatch(matchId)}
+      on:removeMatch={(e) => removeMatch(e.detail.matchId)}
     />
     <div class="mt-3">
       <button class="btn btn-primary" on:click={() => importData()}
