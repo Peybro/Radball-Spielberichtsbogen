@@ -1,5 +1,6 @@
 <script lang="ts">
   import Accordion from "./lib/Accordion.svelte";
+  import Print from "./lib/Print.svelte";
   import Match from "./model/Match";
   import Team from "./model/Team";
 
@@ -38,6 +39,8 @@
   }
 
   function importData() {
+    editMode = false;
+
     // Check for the various File API support.
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       // Great success! All the File APIs are supported.
@@ -126,6 +129,8 @@
     // simulate a click on the link to open the file dialog
     link.click();
   }
+
+  let editMode = true;
 </script>
 
 <svelte:window
@@ -138,12 +143,11 @@
 
 <main>
   <div class="container my-4">
-    <h1>{data.title}</h1>
-
     <Accordion
       bind:data
       bind:teams
       bind:list
+      bind:editMode
       on:createMatches={() => createMatches()}
       on:removeMatch={(e) => removeMatch(e.detail.matchId)}
     />
@@ -154,9 +158,18 @@
       <button class="btn btn-primary" on:click={() => exportData()}
         >Export</button
       >
+      <button class="btn btn-primary" on:click={() => window.print()}>
+        Drucken
+      </button>
+      <div class="mt-2">
+        <i class="bi bi-info-circle" /> Wähle als Drucker "Microsoft Print to PDF"
+        um das Dokument als PDF zu speichern.
+      </div>
     </div>
   </div>
 </main>
+
+<Print {data} {teams} {list} />
 
 <style>
 </style>
