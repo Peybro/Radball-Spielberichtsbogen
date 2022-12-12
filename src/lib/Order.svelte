@@ -52,12 +52,21 @@
       ];
     }
   }
+
+  let editMode = false;
 </script>
 
+<div><i class="bi bi-info-circle" /> Spiele per Drag and Drop anordnen.</div>
+<div>
+  <i class="bi bi-info-circle" /> Mannschaften durch Drücken auf
+  <span class="fw-bold">--</span> tauschen.
+</div>
 <button
-  class="btn btn-outline-danger"
-  data-bs-toggle="collapse"
-  data-bs-target="#editMatches">einzelne Spiele entfernen</button
+  class={`btn btn-outline-${editMode ? "primary" : "danger"}`}
+  on:click={() => (editMode = !editMode)}
+  >{editMode
+    ? "Löschen beenden"
+    : "einzelne Spiele entfernen (Achtung, wird die Spielfolge überschreiben!)"}</button
 >
 
 <hr />
@@ -150,11 +159,11 @@
         />
       </div>
 
-      <div class="collapse col-1" id="editMatches">
+      <div class="col-1">
         <button
           class="btn btn-danger"
           on:click={() => dispatch("removeMatch", { matchId: match.Id })}
-          >X</button
+          disabled={!editMode}>X</button
         >
       </div>
 

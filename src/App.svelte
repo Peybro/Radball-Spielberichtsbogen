@@ -39,6 +39,8 @@
   }
 
   function importData() {
+    editMode = false;
+
     // Check for the various File API support.
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       // Great success! All the File APIs are supported.
@@ -127,6 +129,8 @@
     // simulate a click on the link to open the file dialog
     link.click();
   }
+
+  let editMode = true;
 </script>
 
 <svelte:window
@@ -137,14 +141,13 @@
   }}
 />
 
-<Print {data} {teams} {list} />
-
 <main>
   <div class="container my-4">
     <Accordion
       bind:data
       bind:teams
       bind:list
+      bind:editMode
       on:createMatches={() => createMatches()}
       on:removeMatch={(e) => removeMatch(e.detail.matchId)}
     />
@@ -159,12 +162,14 @@
         Drucken
       </button>
       <div class="mt-2">
-        Wähle als Drucker "Microsoft Print to PDF" um das Dokument als PDF zu
-        speichern.
+        <i class="bi bi-info-circle" /> Wähle als Drucker "Microsoft Print to PDF"
+        um das Dokument als PDF zu speichern.
       </div>
     </div>
   </div>
 </main>
+
+<Print {data} {teams} {list} />
 
 <style>
 </style>

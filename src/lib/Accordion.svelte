@@ -11,6 +11,8 @@
   export let data;
   export let teams;
   export let list;
+
+  export let editMode;
 </script>
 
 <div class="accordion" id="main-accordion">
@@ -46,7 +48,7 @@
     <div id="collapseTeams" class="accordion-collapse collapse show">
       <!-- {data-bs-parent="#main-accordion"} -->
       <div class="accordion-body">
-        <Teams bind:teams on:createMatches={() => dispatch("createMatches")} />
+        <Teams bind:teams bind:editMode on:createMatches={() => dispatch("createMatches")} />
       </div>
     </div>
   </div>
