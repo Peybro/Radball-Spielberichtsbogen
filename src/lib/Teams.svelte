@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Team from "../model/Team";
 
   import { createEventDispatcher } from "svelte";
@@ -6,6 +6,7 @@
   const dispatch = createEventDispatcher();
 
   export let teams;
+  export let list;
 
   function addNewTeam() {
     teams = [...teams, new Team()];
@@ -107,19 +108,40 @@
       </div>
 
       <button class="btn btn-danger mb-3 w-100" on:click={() => removeTeam(i)}
-        >X</button
-      >
+        >X
+      </button>
       <hr />
     </div>
   </div>
 {/each}
-<button
-  class="btn btn-warning mb-3 w-100"
-  on:click={() => addNewTeam()}
-  disabled={!editMode}><i class="bi bi-plus-circle"></i> (Achtung, wird die Spielfolge überschreiben!)</button
->
+{#if editMode}
+  <button
+    class={`btn btn-${
+      list.some(
+        (match) =>
+          match.HalfTimeScoreTeam1 !== undefined ||
+          match.HalfTimeScoreTeam2 !== undefined ||
+          match.FinalScoreTeam1 !== undefined ||
+          match.FinalScoreTeam2 !== undefined
+      )
+        ? "warning"
+        : "primary"
+    } mb-3 w-100`}
+    on:click={() => addNewTeam()}
+    ><i class="bi bi-plus-circle" />{list.some(
+      (match) =>
+        match.HalfTimeScoreTeam1 !== undefined ||
+        match.HalfTimeScoreTeam2 !== undefined ||
+        match.FinalScoreTeam1 !== undefined ||
+        match.FinalScoreTeam2 !== undefined
+    )
+      ? " (Achtung, wird die Spielfolge überschreiben!)"
+      : ""}
+  </button>
+{/if}
 <button
   class={`btn btn-${editMode ? "primary" : "warning"} mb-3 w-100`}
   on:click={() => (editMode = !editMode)}
+  disabled={teams.length === 0 || teams.some((team) => team.Name === "")}
   >{editMode ? "Fertig" : "Bearbeiten"}</button
 >

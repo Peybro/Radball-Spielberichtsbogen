@@ -14,7 +14,7 @@
     endTime: "",
     chiefReferee: "",
     referee: "",
-    duration: "2x7",
+    duration: "2 x 7",
     notPlaying: "",
   };
   let teams = [];
@@ -45,8 +45,6 @@
   }
 
   function removeMatch(matchId: string) {
-    console.log(matchId);
-
     list = list.filter((match) => match.Id !== matchId);
   }
 
