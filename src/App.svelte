@@ -4,6 +4,8 @@
   import Match from "./model/Match";
   import Team from "./model/Team";
 
+  let editMode = true;
+
   let data = {
     title: "",
     location: "",
@@ -17,6 +19,16 @@
   };
   let teams = [];
   let list = [];
+
+  const url = new URL(window.location.href);
+  if (url.searchParams.has("val")) {
+    const jsonData = url.searchParams.get("val");
+    try {
+      importData(jsonData);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   function createMatches() {
     list = combinations(teams);
@@ -38,9 +50,52 @@
     list = list.filter((match) => match.Id !== matchId);
   }
 
-  function importData() {
+  function importData(jsonData) {
     editMode = false;
 
+    const fileContent = JSON.parse(jsonData);
+
+    data = fileContent.data;
+
+    teams = [];
+    fileContent.teams.forEach((team) => {
+      const newTeam = new Team(
+        team.name,
+        {
+          firstName: team.player1.firstName,
+          lastName: team.player1.lastName,
+          licence: team.player1.licence,
+        },
+        {
+          firstName: team.player2.firstName,
+          lastName: team.player2.lastName,
+          licence: team.player2.licence,
+        },
+        {
+          firstName: team.player3.firstName,
+          lastName: team.player3.lastName,
+          licence: team.player3.licence,
+        }
+      );
+      newTeam.Id = team.id;
+
+      teams = [...teams, newTeam];
+    });
+
+    list = [];
+    fileContent.matches.forEach((match) => {
+      const newMatch = new Match(match.team1Id, match.team2Id, match.referee);
+      newMatch.Id = match.id;
+      newMatch.HalfTimeScoreTeam1 = match.halfTimeScoreTeam1;
+      newMatch.HalfTimeScoreTeam2 = match.halfTimeScoreTeam2;
+      newMatch.FinalScoreTeam1 = match.finalScoreTeam1;
+      newMatch.FinalScoreTeam2 = match.finalScoreTeam2;
+
+      list = [...list, newMatch];
+    });
+  }
+
+  function importFile() {
     // Check for the various File API support.
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       // Great success! All the File APIs are supported.
@@ -54,50 +109,7 @@
           const reader = new FileReader();
           reader.readAsText(file, "UTF-8");
           reader.onload = function (event) {
-            const fileContent = JSON.parse(event.target.result);
-
-            data = fileContent.data;
-
-            teams = [];
-            fileContent.teams.forEach((team) => {
-              const newTeam = new Team(
-                team.name,
-                {
-                  firstName: team.player1.firstName,
-                  lastName: team.player1.lastName,
-                  licence: team.player1.licence,
-                },
-                {
-                  firstName: team.player2.firstName,
-                  lastName: team.player2.lastName,
-                  licence: team.player2.licence,
-                },
-                {
-                  firstName: team.player3.firstName,
-                  lastName: team.player3.lastName,
-                  licence: team.player3.licence,
-                }
-              );
-              newTeam.Id = team.id;
-
-              teams = [...teams, newTeam];
-            });
-
-            list = [];
-            fileContent.matches.forEach((match) => {
-              const newMatch = new Match(
-                match.team1Id,
-                match.team2Id,
-                match.referee
-              );
-              newMatch.Id = match.id;
-              newMatch.HalfTimeScoreTeam1 = match.halfTimeScoreTeam1;
-              newMatch.HalfTimeScoreTeam2 = match.halfTimeScoreTeam2;
-              newMatch.FinalScoreTeam1 = match.finalScoreTeam1;
-              newMatch.FinalScoreTeam2 = match.finalScoreTeam2;
-
-              list = [...list, newMatch];
-            });
+            importData(event.target.result);
           };
           reader.onerror = function (event) {
             console.error("Failed to read file.");
@@ -129,8 +141,6 @@
     // simulate a click on the link to open the file dialog
     link.click();
   }
-
-  let editMode = true;
 </script>
 
 <svelte:window
@@ -152,7 +162,7 @@
       on:removeMatch={(e) => removeMatch(e.detail.matchId)}
     />
     <div class="mt-3">
-      <button class="btn btn-primary" on:click={() => importData()}
+      <button class="btn btn-primary" on:click={() => importFile()}
         >Import</button
       >
       <button class="btn btn-primary" on:click={() => exportData()}
