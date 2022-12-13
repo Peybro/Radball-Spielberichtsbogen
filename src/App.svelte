@@ -150,7 +150,7 @@
 />
 
 <main>
-  <div class="container my-4">
+  <div class="container py-4">
     <Accordion
       bind:data
       bind:teams
