@@ -27,7 +27,7 @@
         data-bs-toggle="collapse"
         data-bs-target="#collapseInfo"
       >
-        Info {data.title !== "" ? `zu ${data.title}` : ""}
+        Infos {data.title !== "" ? `zu ${data.title}` : ""}
       </button>
     </h2>
     <div id="collapseInfo" class="accordion-collapse collapse show">
