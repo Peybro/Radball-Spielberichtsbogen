@@ -1,5 +1,7 @@
 <script lang="ts">
   import Accordion from "./lib/Accordion.svelte";
+  import ExportModal from "./lib/ExportModal.svelte";
+  import ImportModal from "./lib/ImportModal.svelte";
   import Print from "./lib/Print.svelte";
   import Match from "./model/Match";
   import Team from "./model/Team";
@@ -48,11 +50,11 @@
     list = list.filter((match) => match.Id !== matchId);
   }
 
-  function importData(jsonData: any): void {
+  function importData(jsonString: string): void {
     editMode = false;
 
-    const fileContent = JSON.parse(jsonData);
-
+    const fileContent = JSON.parse(jsonString);
+    
     data = fileContent.data;
 
     teams = [];
@@ -93,52 +95,11 @@
     });
   }
 
-  function importFile(): void {
-    // Check for the various File API support.
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-      // Great success! All the File APIs are supported.
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = ".txt";
-
-      input.addEventListener("change", function (event) {
-        const file = (<HTMLInputElement>event.target).files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.readAsText(file, "UTF-8");
-          reader.onload = function (event) {
-            importData(event.target.result);
-          };
-          reader.onerror = function (event) {
-            console.error("Failed to read file.");
-          };
-        }
-      });
-
-      input.click();
-    } else {
-      console.error("The File APIs are not fully supported in this browser.");
-    }
-  }
-
-  function exportFile(): void {
-    const teamsObject = [...teams].map((team) => team.toObject());
-    const matchesObject = [...list].map((match) => match.toObject());
-
-    // create a new Blob object representing a new file
-    const file = new Blob(
-      [JSON.stringify({ data, teams: teamsObject, matches: matchesObject })],
-      { type: "text/plain" }
-    );
-
-    // create a link element to simulate a click on the link
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(file);
-    link.download = `${data.date}_spielberichtsbogen_${data.title}.txt`;
-
-    // simulate a click on the link to open the file dialog
-    link.click();
-  }
+  $: dataAsObject = {
+    data,
+    teams: [...teams].map((team) => team.toObject()),
+    matches: [...list].map((match) => match.toObject()),
+  };
 </script>
 
 <svelte:window
@@ -160,12 +121,8 @@
       on:removeMatch={(e) => removeMatch(e.detail.matchId)}
     />
     <div class="mt-3">
-      <button class="btn btn-primary" on:click={() => importFile()}
-        >Import</button
-      >
-      <button class="btn btn-primary" on:click={() => exportFile()}
-        >Export</button
-      >
+      <ImportModal on:import={(e) => importData(e.detail.data)} />
+      <ExportModal data={dataAsObject} />
       <button class="btn btn-primary" on:click={() => window.print()}>
         Drucken
       </button>

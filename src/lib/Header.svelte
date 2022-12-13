@@ -37,8 +37,9 @@
   />
 </div>
 <div class="mb-3">
-  <label for="" class="form-label">Spielort</label>
+  <label for="locationTextarea" class="form-label">Spielort</label>
   <textarea
+    id="locationTextarea"
     type="text"
     class="form-control"
     placeholder="Anschrift Veranstaltungsort"
@@ -102,11 +103,22 @@
 </div>
 
 <div class="mb-3">
-  <label for="" class="form-label">Spielfrei</label>
+  <label for="notPlayingTextarea" class="form-label">Spielfrei</label>
   <textarea
+  id="notPlayingTextarea"
     type="text"
     class="form-control"
     placeholder="Spielfrei"
     bind:value={data.notPlaying}
   />
 </div>
+
+<style>
+  #locationTextarea {
+    height: 6rem;
+  }
+
+  #notPlayingTextarea {
+    height: 6rem;
+  }
+</style>
