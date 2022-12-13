@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
+  import type Match from "../model/Match";
   import Result from "../model/Result";
+  import type Team from "../model/Team";
 
-  export let teams;
-  export let list;
+  export let teams:Team[];
+  export let list:Match[];
 
   $: result = [...teams].map((team) => {
     let games = 0;

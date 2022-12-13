@@ -1,27 +1,26 @@
 <script lang="ts">
   import Team from "../model/Team";
+  import type Match from "../model/Match";
 
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  export let teams;
-  export let list;
+  export let teams: Team[];
+  export let list: Match[];
 
-  function addNewTeam() {
+  function addNewTeam():void {
     teams = [...teams, new Team()];
     dispatch("createMatches");
   }
 
-  /**
-   * @param {number} index
-   */
-  function removeTeam(index) {
+  function removeTeam(index:number):void {
     teams = teams.filter((team, i) => i !== index);
+    // TODO: bessere Lösung finden
     dispatch("createMatches");
   }
 
-  export let editMode;
+  export let editMode: boolean;
 </script>
 
 {#each teams as team, i}
@@ -31,7 +30,7 @@
         type="text"
         class="form-control"
         placeholder={`Mannschaft ${i + 1}`}
-        bind:value={team.name}
+        bind:value={team.Name}
         on:input={() => dispatch("createMatches")}
       />
       <span
@@ -108,7 +107,7 @@
       </div>
 
       <button class="btn btn-danger mb-3 w-100" on:click={() => removeTeam(i)}
-        >X
+        ><i class="bi bi-trash" /> (Achtung, wird Spielfolge zurücksetzen!)
       </button>
       <hr />
     </div>
