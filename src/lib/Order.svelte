@@ -10,13 +10,13 @@
     return teams.find((team: any) => team.Id === teamId).name;
   }
 
-  let hovering = false;
-
   let isDragging = false;
   let startIndex;
   let currentIndex;
 
-  function handleTouchStart(event, index) {
+  function handleDragStart(event, index) {
+    if (!editMode) return;
+
     isDragging = true;
     startIndex = index;
     currentIndex = index;
@@ -24,7 +24,8 @@
     event.dataTransfer.setData("text/plain", index.toString());
   }
 
-  function handleTouchMove(event, index) {
+  function handleDragMove(event, index) {
+    if (!editMode) return;
     if (!isDragging) return;
 
     currentIndex = index;
@@ -32,7 +33,7 @@
     event.preventDefault();
   }
 
-  function handleTouchEnd() {
+  function handleDragEnd() {
     if (!isDragging) return;
 
     isDragging = false;
@@ -53,122 +54,150 @@
     }
   }
 
+  let deleteMode = false;
   let editMode = false;
 </script>
 
-<div><i class="bi bi-info-circle" /> Spiele per Drag and Drop anordnen.</div>
-<div>
-  <i class="bi bi-info-circle" /> Mannschaften durch Drücken auf
-  <span class="fw-bold">--</span> tauschen.
-</div>
+{#if editMode}
+  <div><i class="bi bi-info-circle" /> Spiele per Drag and Drop anordnen.</div>
+{/if}
+<button class="btn btn-primary my-1" on:click={() => (editMode = !editMode)}
+  >{editMode ? "Fertig angeordnet" : "anordnen"}</button
+>
 <button
-  class={`btn btn-outline-${editMode ? "primary" : "danger"}`}
-  on:click={() => (editMode = !editMode)}
-  >{editMode
-    ? "Löschen beenden"
-    : "einzelne Spiele entfernen (Achtung, wird die Spielfolge überschreiben!)"}</button
+  class={`btn btn-outline-${deleteMode ? "primary" : "danger"} my-1`}
+  on:click={() => (deleteMode = !deleteMode)}
+  >{deleteMode ? "Entfernen beenden" : "einzelne Spiele entfernen"}</button
 >
 
 <hr />
 
-<div class="d-none d-sm-block">
+<div class="d-none d-md-block">
   <div class="row">
-    <div class="col-5" />
-    <div class="col-2 text-center">Halbzeit</div>
-    <div class="col-2 text-center">Endstand</div>
-    <div class="col-2 text-center">Kommisär</div>
+    <div
+      class={`col-${
+        editMode && deleteMode ? "7" : editMode ? "6" : deleteMode ? "7" : "6"
+      }`}
+    />
+    <div class="col text-center">Halbzeit</div>
+    <div class="col text-center">Endstand</div>
+    <div class="col text-center">Kommissär</div>
   </div>
 </div>
 
-<div class="list">
+<div class="list-group">
   {#each list as match, index (`match-${index}`)}
-    <div
-      class="row listItem"
-      draggable="true"
+    <li
+      class="list-group-item pt-2"
+      draggable={editMode}
       class:dragging={isDragging && currentIndex === index}
-      on:touchstart={(e) => handleTouchStart(e, index)}
-      on:touchmove={(e) => handleTouchMove(e, index)}
-      on:touchend={handleTouchEnd}
-      on:dragstart={(e) => handleTouchStart(e, index)}
-      on:dragover={(e) => handleTouchMove(e, index)}
-      on:dragend={handleTouchEnd}
+      on:touchstart={(e) => handleDragStart(e, index)}
+      on:touchmove={(e) => handleDragMove(e, index)}
+      on:touchend={handleDragEnd}
+      on:dragstart={(e) => handleDragStart(e, index)}
+      on:dragover={(e) => handleDragMove(e, index)}
+      on:dragend={handleDragEnd}
     >
-      <div class="col-1">{index + 1}.</div>
+      <div class="row">
+        {#if editMode}
+          <div class="col-1 pgRow">
+            <i class="bi bi-grip-vertical" />
+          </div>
+        {/if}
+        {#if deleteMode}
+          <div class="col-2 pgRow">
+            <button
+              class="btn btn-danger"
+              on:click={() => dispatch("removeMatch", { matchId: match.Id })}
+            >
+              <i class="bi bi-trash" />
+            </button>
+          </div>
+        {/if}
+        <div class="col row">
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="row row-cols-12">
+              <div class="col-1">{index + 1}.</div>
+              <div class="col">
+                {getTeamNameById(match.Team1Id) === ""
+                  ? "[Bitte Teamname eingeben]"
+                  : getTeamNameById(match.Team1Id)}
+              </div>
+              <div class="col">
+                {#if editMode}
+                  <i
+                    class="bi bi-arrow-left-right"
+                    on:click={() => {
+                      match.switchTeams();
+                      // needed as manual state reload
+                      match.Referee = match.Referee;
+                    }}
+                    on:keydown={() => console.log("Das ist kein Button")}
+                  />
+                {:else}
+                  <span>-</span>
+                {/if}
+                {getTeamNameById(match.Team2Id) === ""
+                  ? "[Bitte Teamname eingeben]"
+                  : getTeamNameById(match.Team2Id)}
+              </div>
+            </div>
+          </div>
 
-      <div class="col-2">{getTeamNameById(match.Team1Id)}</div>
-      <div class="col-2">
-        <span
-          id="switch"
-          on:click={() => {
-            match.switchTeams();
-            // needed as manual state reload
-            match.Referee = match.Referee;
-          }}
-          on:mouseenter={() => (hovering = true)}
-          on:mouseleave={() => (hovering = false)}
-          on:keydown={() => console.log("Das ist kein Button")}
-          >{hovering ? "<" : ""}--{hovering ? ">" : ""}</span
-        >
-        {getTeamNameById(match.Team2Id)}
-      </div>
+          <div class="col-xs-12 col-sm-12 col-md-2">
+            <div class="input-group my-1">
+              <span class="input-group-text d-block d-md-none">Halbzeit</span>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                max="99"
+                bind:value={match.HalfTimeScoreTeam1}
+              />
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                max="99"
+                bind:value={match.HalfTimeScoreTeam2}
+              />
+            </div>
+          </div>
 
-      <div class="col-2">
-        <div class="input-group mb-3">
-          <input
-            type="number"
-            class="form-control"
-            min="0"
-            max="99"
-            bind:value={match.HalfTimeScoreTeam1}
-          />
-          <input
-            type="number"
-            class="form-control"
-            min="0"
-            max="99"
-            bind:value={match.HalfTimeScoreTeam2}
-          />
+          <div class="col-xs-12 col-sm-12 col-md-2">
+            <div class="input-group my-1">
+              <span class="input-group-text d-block d-md-none">Endstand</span>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                max="99"
+                bind:value={match.FinalScoreTeam1}
+              />
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                max="99"
+                bind:value={match.FinalScoreTeam2}
+              />
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-2 position-relative">
+            <div class="input-group my-1 ">
+              <span class="input-group-text d-block d-md-none">Kommissär</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Kommissär"
+                bind:value={match.Referee}
+              />
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="col-2">
-        <div class="input-group mb-3">
-          <input
-            type="number"
-            class="form-control"
-            min="0"
-            max="99"
-            bind:value={match.FinalScoreTeam1}
-          />
-          <input
-            type="number"
-            class="form-control"
-            min="0"
-            max="99"
-            bind:value={match.FinalScoreTeam2}
-          />
-        </div>
-      </div>
-
-      <div class="col-2">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Kommisär"
-          bind:value={match.Referee}
-        />
-      </div>
-
-      <div class="col-1">
-        <button
-          class="btn btn-danger"
-          on:click={() => dispatch("removeMatch", { matchId: match.Id })}
-          disabled={!editMode}>X</button
-        >
-      </div>
-
-      <hr />
-    </div>
+    </li>
   {/each}
 </div>
 
@@ -183,13 +212,13 @@
     cursor: pointer;
   }
 
-  .listItem.dragging {
-    /* opacity: 0.5; */
+  li.dragging {
+    opacity: 0.8;
     background-color: #0b5dd5;
   }
 
-  #switch {
-    cursor: pointer;
-    font-weight: bold;
+  .pgRow {
+    display: flex; /* make the row a flex container */
+    align-items: center; /* vertically center each flex item in the container */
   }
 </style>
