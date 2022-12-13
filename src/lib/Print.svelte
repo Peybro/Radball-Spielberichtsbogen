@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let data;
+  import type { data } from "../model/types";
+
+  export let data: data;
   export let teams;
   export let list;
 

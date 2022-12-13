@@ -1,14 +1,16 @@
 <script lang="ts">
-  export let data;
+  import type { data } from "../model/types";
 
-  function setDate() {
+  export let data: data;
+
+  function setDate(): void {
     const today = new Date();
     data.date = `${today.getFullYear()}-${
       today.getMonth() + 1
     }-${today.getDate()}`;
   }
 
-  function setStartTime() {
+  function setStartTime(): void {
     const today = new Date();
     data.startTime =
       `0${today.getHours()}`.slice(-2) +
@@ -16,7 +18,7 @@
       `0${today.getMinutes()}`.slice(-2);
   }
 
-  function setEndTime() {
+  function setEndTime(): void {
     const today = new Date();
     data.endTime =
       `0${today.getHours()}`.slice(-2) +
@@ -47,26 +49,31 @@
 <div class="row">
   <div class="col-sm-4 col-xs-12">
     <div class="mb-3">
-      <!-- <button class="input-group-text" on:click={() => setDate()}>Datum</button> -->
-      <label for="" class="form-label">Datum</label>
+      <label for="" class="form-label" on:click={setDate} on:keydown={setDate}
+        >Datum</label
+      >
       <input type="date" class="form-control" bind:value={data.date} />
     </div>
   </div>
   <div class="col-sm-4 col-xs-12">
     <div class="mb-3">
-      <!-- <button class="input-group-text" on:click={() => setStartTime()}
-        >Beginn</button
-      > -->
-      <label for="" class="form-label">Beginn</label>
+      <label
+        for=""
+        class="form-label"
+        on:click={setStartTime}
+        on:keydown={setStartTime}>Beginn</label
+      >
       <input type="time" class="form-control" bind:value={data.startTime} />
     </div>
   </div>
   <div class="col-sm-4 col-xs-12">
     <div class="mb-3">
-      <!-- <button class="input-group-text" on:click={() => setEndTime()}
-        >Ende</button
-      > -->
-      <label for="" class="form-label">Ende</label>
+      <label
+        for=""
+        class="form-label"
+        on:click={setEndTime}
+        on:keydown={setEndTime}>Ende</label
+      >
       <input type="time" class="form-control" bind:value={data.endTime} />
     </div>
   </div>
@@ -75,14 +82,12 @@
 <div class="row">
   <div class="col-sm-4 col-xs-12">
     <div class="mb-3">
-      <!-- <span class="input-group-text">Chief-Kommisär</span> -->
       <label for="" class="form-label">Chief-Kommisär</label>
       <input type="text" class="form-control" bind:value={data.chiefReferee} />
     </div>
   </div>
   <div class="col-sm-4 col-xs-12">
     <div class="mb-3">
-      <!-- <span class="input-group-text">Kommisär</span> -->
       <label for="" class="form-label">Kommissär</label>
       <input type="text" class="form-control" bind:value={data.referee} />
     </div>
@@ -90,7 +95,6 @@
   <div class="col-sm-4 col-xs-12">
     <label for="" class="form-label">Spielzeit</label>
     <div class="input-group mb-3">
-      <!-- <span class="input-group-text">Spielzeit</span> -->
       <input type="text" class="form-control" bind:value={data.duration} />
       <span class="input-group-text">Minuten</span>
     </div>
@@ -98,7 +102,6 @@
 </div>
 
 <div class="mb-3">
-  <!-- <span class="input-group-text">Spielfrei</span> -->
   <label for="" class="form-label">Spielfrei</label>
   <textarea
     type="text"

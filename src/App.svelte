@@ -17,8 +17,8 @@
     duration: "2 x 7",
     notPlaying: "",
   };
-  let teams = [];
-  let list = [];
+  let teams: Team[] = [];
+  let list: Match[] = [];
 
   const url = new URL(window.location.href);
   if (url.searchParams.has("val")) {
@@ -30,11 +30,11 @@
     }
   }
 
-  function createMatches() {
+  function createMatches(): void {
     list = combinations(teams);
   }
 
-  function combinations(arr) {
+  function combinations(arr: Team[]): Match[] {
     const result = [];
     for (let i = 0; i < arr.length; i++) {
       for (let j = i + 1; j < arr.length; j++) {
@@ -44,11 +44,11 @@
     return result;
   }
 
-  function removeMatch(matchId: string) {
+  function removeMatch(matchId: string): void {
     list = list.filter((match) => match.Id !== matchId);
   }
 
-  function importData(jsonData) {
+  function importData(jsonData: any): void {
     editMode = false;
 
     const fileContent = JSON.parse(jsonData);
@@ -93,7 +93,7 @@
     });
   }
 
-  function importFile() {
+  function importFile(): void {
     // Check for the various File API support.
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       // Great success! All the File APIs are supported.
@@ -121,7 +121,7 @@
     }
   }
 
-  function exportData() {
+  function exportFile(): void {
     const teamsObject = [...teams].map((team) => team.toObject());
     const matchesObject = [...list].map((match) => match.toObject());
 
@@ -150,7 +150,7 @@
 />
 
 <main>
-  <div class="container my-4">
+  <div class="container py-4">
     <Accordion
       bind:data
       bind:teams
@@ -163,7 +163,7 @@
       <button class="btn btn-primary" on:click={() => importFile()}
         >Import</button
       >
-      <button class="btn btn-primary" on:click={() => exportData()}
+      <button class="btn btn-primary" on:click={() => exportFile()}
         >Export</button
       >
       <button class="btn btn-primary" on:click={() => window.print()}>

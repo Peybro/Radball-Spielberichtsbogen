@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -7,12 +7,15 @@
   import Teams from "./Teams.svelte";
   import Order from "./Order.svelte";
   import Table from "./Table.svelte";
+  import type Team from "../model/Team";
+  import type Match from "../model/Match";
+  import type { data } from "../model/types";
 
-  export let data;
-  export let teams;
-  export let list;
+  export let data: data;
+  export let teams: Team[];
+  export let list: Match[];
 
-  export let editMode;
+  export let editMode: boolean;
 </script>
 
 <div class="accordion" id="main-accordion">
@@ -24,7 +27,7 @@
         data-bs-toggle="collapse"
         data-bs-target="#collapseInfo"
       >
-        Info
+        Infos {data.title !== "" ? `zu ${data.title}` : ""}
       </button>
     </h2>
     <div id="collapseInfo" class="accordion-collapse collapse show">
@@ -42,7 +45,7 @@
         data-bs-toggle="collapse"
         data-bs-target="#collapseTeams"
       >
-        Mannschaften
+        Mannschaften {`(${teams.length})`}
       </button>
     </h2>
     <div id="collapseTeams" class="accordion-collapse collapse show">
@@ -65,7 +68,13 @@
         data-bs-toggle="collapse"
         data-bs-target="#collapseMatches"
       >
-        Spielfolge
+        Spielfolge {`(${
+          list.filter(
+            (match) =>
+              match.FinalScoreTeam1 != undefined &&
+              match.FinalScoreTeam2 != undefined
+          ).length
+        }/${list.length})`}
       </button>
     </h2>
     <div id="collapseMatches" class="accordion-collapse collapse">

@@ -1,20 +1,22 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import type Match from "../model/Match";
+  import type Team from "../model/Team";
 
-  export let teams: any;
-  export let list: any;
+  export let teams: Team[];
+  export let list: Match[];
 
   const dispatch = createEventDispatcher();
 
   function getTeamNameById(teamId: string) {
-    return teams.find((team: any) => team.Id === teamId).name;
+    return teams.find((team: any) => team.Id === teamId).Name;
   }
 
   let isDragging = false;
-  let startIndex;
-  let currentIndex;
+  let startIndex: number;
+  let currentIndex: number;
 
-  function handleDragStart(event, index) {
+  function handleDragStart(event: any, index: number): void {
     if (!editMode) return;
 
     isDragging = true;
@@ -24,7 +26,7 @@
     event.dataTransfer.setData("text/plain", index.toString());
   }
 
-  function handleDragMove(event, index) {
+  function handleDragMove(event: any, index: number): void {
     if (!editMode) return;
     if (!isDragging) return;
 
@@ -33,16 +35,17 @@
     event.preventDefault();
   }
 
-  function handleDragEnd() {
+  function handleDragEnd(): void {
     if (!isDragging) return;
 
     isDragging = false;
 
-    // swap the items in the array
+    // swap
     // const temp = list[startIndex];
     // list[startIndex] = list[currentIndex];
     // list[currentIndex] = temp;
 
+    // insert at index
     if (startIndex !== currentIndex) {
       let draggedItem = list[startIndex];
       list = [...list.slice(0, startIndex), ...list.slice(startIndex + 1)];
@@ -56,32 +59,36 @@
 
   let deleteMode = false;
   let editMode = false;
+
+  function handleEditButton(): void {
+    if (editMode) deleteMode = false;
+    editMode = !editMode;
+  }
 </script>
 
 {#if editMode}
   <div><i class="bi bi-info-circle" /> Spiele per Drag and Drop anordnen.</div>
 {/if}
-<button class="btn btn-primary my-1" on:click={() => (editMode = !editMode)}
-  >{editMode ? "Fertig angeordnet" : "anordnen"}</button
+<button class="btn btn-primary my-1" on:click={() => handleEditButton()}
+  >{editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
 >
-<button
-  class={`btn btn-outline-${deleteMode ? "primary" : "danger"} my-1`}
-  on:click={() => (deleteMode = !deleteMode)}
-  >{deleteMode ? "Entfernen beenden" : "einzelne Spiele entfernen"}</button
->
+{#if editMode}
+  <button
+    class={`btn btn-outline-${deleteMode ? "primary" : "danger"} my-1`}
+    on:click={() => (deleteMode = !deleteMode)}
+    >{deleteMode ? "Entfernen beenden" : "einzelne Spiele entfernen"}</button
+  >
+{/if}
 
 <hr />
 
 <div class="d-none d-md-block">
   <div class="row">
-    <div
-      class={`col-${
-        editMode && deleteMode ? "7" : editMode ? "6" : deleteMode ? "7" : "6"
-      }`}
-    />
+    <div class="col-6" />
     <div class="col text-center">Halbzeit</div>
     <div class="col text-center">Endstand</div>
     <div class="col text-center">Kommissär</div>
+    <div class={`${deleteMode ? "col-2" : "d-none"}`} />
   </div>
 </div>
 
@@ -101,17 +108,10 @@
       <div class="row">
         {#if editMode}
           <div class="col-1 pgRow">
-            <i class="bi bi-grip-vertical" />
-          </div>
-        {/if}
-        {#if deleteMode}
-          <div class="col-2 pgRow">
-            <button
-              class="btn btn-danger"
-              on:click={() => dispatch("removeMatch", { matchId: match.Id })}
-            >
-              <i class="bi bi-trash" />
-            </button>
+            <i
+              class="bi bi-grip-vertical"
+              style={`cursor: ${isDragging ? "grabbing" : "grab"};`}
+            />
           </div>
         {/if}
         <div class="col row">
@@ -127,6 +127,7 @@
                 {#if editMode}
                   <i
                     class="bi bi-arrow-left-right"
+                    style="cursor: pointer;"
                     on:click={() => {
                       match.switchTeams();
                       // needed as manual state reload
@@ -196,6 +197,16 @@
             </div>
           </div>
         </div>
+        {#if deleteMode}
+          <div class="col-2 pgRow">
+            <button
+              class="btn btn-danger"
+              on:click={() => dispatch("removeMatch", { matchId: match.Id })}
+            >
+              <i class="bi bi-trash" />
+            </button>
+          </div>
+        {/if}
       </div>
     </li>
   {/each}
@@ -218,7 +229,7 @@
   }
 
   .pgRow {
-    display: flex; /* make the row a flex container */
-    align-items: center; /* vertically center each flex item in the container */
+    display: flex;
+    align-items: center;
   }
 </style>
