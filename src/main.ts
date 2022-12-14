@@ -1,11 +1,11 @@
-import './styles.scss'
+import "./styles.scss";
 
-import * as bootstrap from 'bootstrap'
+import * as bootstrap from "bootstrap";
 
-import App from './App.svelte'
+import App from "./App.svelte";
 
 const app = new App({
-  target: document.getElementById('app'),
-})
+  target: document.getElementById("app"),
+});
 
-export default app
+export default app;
