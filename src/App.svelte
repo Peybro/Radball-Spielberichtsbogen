@@ -7,13 +7,7 @@
     import {onMount} from 'svelte';
     import Team from "./model/Team";
 
-    import {metaInfo} from "./stores/store"
-  import type { data } from "./model/types";
-
-    let metaInfoValue:data;
-    metaInfo.subscribe(value=>{
-      metaInfoValue = value
-    })
+    import {metaInfo} from "./stores/store";
 
     let editMode = true;
 
