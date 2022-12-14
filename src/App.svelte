@@ -7,19 +7,16 @@
     import {onMount} from 'svelte';
     import Team from "./model/Team";
 
+    import {metaInfo} from "./stores/store"
+  import type { data } from "./model/types";
+
+    let metaInfoValue:data;
+    metaInfo.subscribe(value=>{
+      metaInfoValue = value
+    })
+
     let editMode = true;
 
-    let metaInfo = {
-        title: "",
-        location: "",
-        date: "",
-        startTime: "",
-        endTime: "",
-        chiefReferee: "",
-        referee: "",
-        duration: "2 x 7",
-        notPlaying: "",
-    };
     let teamList: Team[] = [];
     let matchList: Match[] = [];
 
@@ -58,7 +55,7 @@
 
         const fileContent = JSON.parse(jsonString);
 
-        metaInfo = fileContent.data;
+        metaInfo.set(fileContent.data);
 
         teamList = [];
         fileContent.teams.forEach((team) => {
@@ -99,7 +96,7 @@
     }
 
     $: dataAsObject = {
-        data: metaInfo,
+        data: $metaInfo,
         teams: [...teamList].map((team) => team.toObject()),
         matches: [...matchList].map((match) => match.toObject()),
     };
@@ -118,7 +115,6 @@
         <Accordion
                 bind:editMode
                 bind:matchList
-                bind:metaInfo
                 bind:teamList
                 on:createMatches={() => createMatches()}
                 on:removeMatch={(e) => removeMatch(e.detail.matchId)}
@@ -137,7 +133,7 @@
     </div>
 </main>
 
-<Print {matchList} {metaInfo} {teamList}/>
+<Print {matchList} {teamList}/>
 
 <style>
 </style>

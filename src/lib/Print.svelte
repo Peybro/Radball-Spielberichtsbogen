@@ -1,9 +1,12 @@
 <script lang="ts">
+  import type Match from "../model/Match";
+  import type Team from "../model/Team";
     import type {data} from "../model/types";
 
-    export let metaInfo: data;
-    export let teamList;
-    export let matchList;
+    import {metaInfo} from "./../stores/store"
+
+    export let teamList: Team[];
+    export let matchList: Match[];
 
     function formatDate(date: string) {
         const tempDate = new Date(date);
@@ -18,25 +21,25 @@
 </script>
 
 <div class="print">
-    <h3 id="title">{metaInfo.title}</h3>
+    <h3 id="title">{$metaInfo.title}</h3>
     <section class="row" id="info">
         <div class="col-2"/>
         <div class="col-auto mb-2" id="location">
-            <div>Spieltag am {formatDate(metaInfo.date)} {metaInfo.startTime} Uhr</div>
-            {#each metaInfo.location.split("\n") as line}
+            <div>Spieltag am {formatDate($metaInfo.date)} {$metaInfo.startTime} Uhr</div>
+            {#each $metaInfo.location.split("\n") as line}
                 <div>{line}</div>
             {/each}
         </div>
         <div>
-            <span id="chief">Chief-Kommissär: {metaInfo.chiefReferee}</span><span
-                id="referees">Kommissär: {metaInfo.referee}</span
+            <span id="chief">Chief-Kommissär: {$metaInfo.chiefReferee}</span><span
+                id="referees">Kommissär: {$metaInfo.referee}</span
         >
         </div>
-        <div id="duration">Spielzeit: {metaInfo.duration} Minuten</div>
+        <div id="duration">Spielzeit: {$metaInfo.duration} Minuten</div>
         <div class="row" id="notPlaying">
             <div class="col-2">Spielfrei:</div>
             <div class="col-auto">
-                {#each metaInfo.notPlaying.split("\n") as line}
+                {#each $metaInfo.notPlaying.split("\n") as line}
                     <div>{line}</div>
                 {/each}
             </div>

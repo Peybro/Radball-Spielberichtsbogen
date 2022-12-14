@@ -10,7 +10,13 @@
 
     const dispatch = createEventDispatcher();
 
-    export let metaInfo: data;
+    import {metaInfo} from "./../stores/store"
+
+    let metaInfoValue:data;
+    metaInfo.subscribe(value=>{
+      metaInfoValue = value
+    })
+
     export let teamList: Team[];
     export let matchList: Match[];
 
@@ -26,13 +32,13 @@
                     data-bs-toggle="collapse"
                     type="button"
             >
-                Infos {metaInfo.title !== "" ? `zu ${metaInfo.title}` : ""}
+                Infos {metaInfoValue.title !== "" ? `zu ${metaInfoValue.title}` : ""}
             </button>
         </h2>
         <div class="accordion-collapse collapse show" id="collapseInfo">
             <!-- {data-bs-parent="#main-accordion"} -->
             <div class="accordion-body">
-                <Header bind:metaInfo/>
+                <Header />
             </div>
         </div>
     </div>
