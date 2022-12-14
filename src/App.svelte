@@ -12,9 +12,27 @@
   let editMode = true;
 
   onMount(async () => {
+    // Register service worker
+    if ("serviceWorker" in navigator) {
+      // If it is, register the service worker
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(function (registration) {
+          // Registration was successful
+          console.log(
+            "ServiceWorker registration successful with scope: ",
+            registration.scope
+          );
+        })
+        .catch(function (err) {
+          // Registration failed
+          console.log("ServiceWorker registration failed: ", err);
+        });
+    }
+
     const url = new URL(window.location.href);
     if (url.searchParams.has("val")) {
-      const jsonData = url.searchParams.get("val");
+      const jsonData = <string>url.searchParams.get("val");
       try {
         importData(jsonData);
       } catch (err) {
