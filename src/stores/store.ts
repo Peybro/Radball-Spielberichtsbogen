@@ -1,16 +1,10 @@
 import { writable } from "svelte/store";
+import {
+  initialMetaInfo,
+  initialTeamList,
+  initialMatchList,
+} from "./initialValues";
 
-export const metaInfo = writable({
-  title: "",
-  location: "",
-  date: "",
-  startTime: "",
-  endTime: "",
-  chiefReferee: "",
-  referee: "",
-  duration: "2 x 7",
-  notPlaying: "",
-});
-
-export const teamList = writable([]);
-export const matchList = writable([]);
+export const metaInfo = writable(initialMetaInfo);
+export const teamList = writable(initialTeamList);
+export const matchList = writable(initialMatchList);

@@ -8,8 +8,14 @@
   import Team from "./model/Team";
 
   import { metaInfo, teamList, matchList } from "./stores/store";
+  import {
+    initialMatchList,
+    initialMetaInfo,
+    initialTeamList,
+  } from "./stores/initialValues";
 
   let editMode = true;
+  let resetMode = false;
 
   onMount(async () => {
     const url = new URL(window.location.href);
@@ -67,6 +73,12 @@
       $matchList = [...$matchList, newMatch];
     });
   }
+
+  function resetData(): void {
+    $metaInfo = initialMetaInfo;
+    $teamList = initialTeamList;
+    $matchList = initialMatchList;
+  }
 </script>
 
 <svelte:window
@@ -89,6 +101,26 @@
       <div class="mt-2">
         <i class="bi bi-info-circle" /> Wähle als Drucker "Microsoft Print to PDF"
         um das Dokument als PDF zu speichern.
+      </div>
+      <hr />
+      <div class="mt-2">
+        {#if resetMode}
+          <button class="btn btn-danger" on:click={resetData}>
+            Zurücksetzen!
+          </button>
+        {/if}
+        <button
+          class="btn btn-warning"
+          on:click={() => (resetMode = !resetMode)}
+        >
+          {resetMode ? "Doch nicht" : "Zurücksetzen"}
+        </button>
+        {#if resetMode}
+          <div class="mt-2">
+            <i class="bi bi-question-circle" /> Alles exportiert was du behalten
+            willst?
+          </div>
+        {/if}
       </div>
     </div>
   </div>

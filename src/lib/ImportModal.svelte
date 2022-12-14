@@ -89,16 +89,25 @@
 
         <label class="form-label" for="">Hash aus Exportierung:</label>
         <textarea bind:value={userHash} class="form-control" type="text" />
-        <button class="btn btn-primary mt-2" on:click={validateHash}
-          >Validieren
-        </button>
-        {#if hashValid !== undefined}
-          {#if hashValid}
-            <span class="text-success">Die Daten sind valide.</span>
-          {:else}
-            <span class="text-danger">Die Daten passen nicht zu dem Hash!</span>
-          {/if}
-        {/if}
+
+        <div class="row align-items-center">
+          <div class="col-3">
+            <button class="btn btn-primary mt-2" on:click={validateHash}
+              >Validieren
+            </button>
+          </div>
+          <div class="col">
+            {#if hashValid !== undefined}
+              {#if hashValid}
+                <span class="text-success">Die Daten sind valide.</span>
+              {:else}
+                <span class="text-danger"
+                  >Die Daten passen nicht zu dem Hash!</span
+                >
+              {/if}
+            {/if}
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button
