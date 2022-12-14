@@ -6,10 +6,10 @@ const CACHE_NAME = "static-cache-v1";
 // Add list of files to cache here.
 const FILES_TO_CACHE = [
   "/index.html",
-  "/assets/bootstrap-icons-966620f9.woff2",
-  "/assets/bootstrap-icons-c6569d46.woff",
-  "/assets/index-5a71dd9b.css",
-  "/assets/index-d4e8b8ee.js",
+  //   "/assets/bootstrap-icons-966620f9.woff2",
+  //   "/assets/bootstrap-icons-c6569d46.woff",
+  //   "/assets/index-5a71dd9b.css",
+  //   "/assets/index-d4e8b8ee.js",
   "/service-worker.js",
 ];
 
