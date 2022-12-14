@@ -15,9 +15,7 @@ export default defineConfig({
       includeAssets: [
         "favicon.png",
         "apple-touch-icon.png",
-        "vite.svg",
-        "android-chrome-192x192.png",
-        "android-chrome-512x512.png",
+        "vite.svg"
       ],
       manifest: {
         short_name: "Spielmanager",
