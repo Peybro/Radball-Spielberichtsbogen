@@ -78,6 +78,9 @@
     $metaInfo = initialMetaInfo;
     $teamList = initialTeamList;
     $matchList = initialMatchList;
+
+    editMode = true;
+    resetMode = false;
   }
 </script>
 
