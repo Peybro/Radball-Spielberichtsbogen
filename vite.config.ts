@@ -40,7 +40,7 @@ export default defineConfig({
         theme_color: "#111111",
         background_color: "#3367D6",
         display: "standalone",
-        scope: "/",
+        scope: "/spiel/",
         description: "Manager für Radball Spieltage",
       },
     }),
