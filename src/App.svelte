@@ -1,14 +1,15 @@
 <script lang="ts">
-  import Accordion from "./lib/Accordion.svelte";
-  import ExportModal from "./lib/ExportModal.svelte";
-  import ImportModal from "./lib/ImportModal.svelte";
-  import Print from "./lib/Print.svelte";
-  import Match from "./model/Match";
-  import Team from "./model/Team";
+    import Accordion from "./lib/Accordion.svelte";
+    import ExportModal from "./lib/ExportModal.svelte";
+    import ImportModal from "./lib/ImportModal.svelte";
+    import Print from "./lib/Print.svelte";
+    import Match from "./model/Match";
+    import {onMount} from 'svelte';
+    import Team from "./model/Team";
 
-  let editMode = true;
+    let editMode = true;
 
-    let data = {
+    let metaInfo = {
         title: "",
         location: "",
         date: "",
@@ -19,21 +20,23 @@
         duration: "2 x 7",
         notPlaying: "",
     };
-    let teams: Team[] = [];
-    let list: Match[] = [];
+    let teamList: Team[] = [];
+    let matchList: Match[] = [];
 
-    const url = new URL(window.location.href);
-    if (url.searchParams.has("val")) {
-        const jsonData = url.searchParams.get("val");
-        try {
-            importData(jsonData);
-        } catch (err) {
-            console.error(err);
+    onMount(async () => {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("val")) {
+            const jsonData = url.searchParams.get("val");
+            try {
+                importData(jsonData);
+            } catch (err) {
+                console.error(err);
+            }
         }
-    }
+    });
 
     function createMatches(): void {
-        list = combinations(teams);
+        matchList = combinations(teamList);
     }
 
     function combinations(arr: Team[]): Match[] {
@@ -47,7 +50,7 @@
     }
 
     function removeMatch(matchId: string): void {
-        list = list.filter((match) => match.Id !== matchId);
+        matchList = matchList.filter((match) => match.Id !== matchId);
     }
 
     function importData(jsonString: string): void {
@@ -55,9 +58,9 @@
 
         const fileContent = JSON.parse(jsonString);
 
-        data = fileContent.data;
+        metaInfo = fileContent.data;
 
-        teams = [];
+        teamList = [];
         fileContent.teams.forEach((team) => {
             const newTeam = new Team(
                 team.name,
@@ -79,10 +82,10 @@
             );
             newTeam.Id = team.id;
 
-            teams = [...teams, newTeam];
+            teamList = [...teamList, newTeam];
         });
 
-        list = [];
+        matchList = [];
         fileContent.matches.forEach((match) => {
             const newMatch = new Match(match.team1Id, match.team2Id, match.referee);
             newMatch.Id = match.id;
@@ -91,14 +94,14 @@
             newMatch.FinalScoreTeam1 = match.finalScoreTeam1;
             newMatch.FinalScoreTeam2 = match.finalScoreTeam2;
 
-            list = [...list, newMatch];
+            matchList = [...matchList, newMatch];
         });
     }
 
     $: dataAsObject = {
-        data,
-        teams: [...teams].map((team) => team.toObject()),
-        matches: [...list].map((match) => match.toObject()),
+        data: metaInfo,
+        teams: [...teamList].map((team) => team.toObject()),
+        matches: [...matchList].map((match) => match.toObject()),
     };
 </script>
 
@@ -113,16 +116,16 @@
 <main>
     <div class="container py-4">
         <Accordion
-                bind:data
                 bind:editMode
-                bind:list
-                bind:teams
+                bind:matchList
+                bind:metaInfo
+                bind:teamList
                 on:createMatches={() => createMatches()}
                 on:removeMatch={(e) => removeMatch(e.detail.matchId)}
         />
         <div class="mt-3">
             <ImportModal on:import={(e) => importData(e.detail.data)}/>
-            <ExportModal data={dataAsObject}/>
+            <ExportModal allData={dataAsObject}/>
             <button class="btn btn-primary" on:click={() => window.print()}>
                 Drucken
             </button>
@@ -134,7 +137,7 @@
     </div>
 </main>
 
-<Print {data} {list} {teams}/>
+<Print {matchList} {metaInfo} {teamList}/>
 
 <style>
 </style>

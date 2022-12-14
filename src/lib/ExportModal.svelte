@@ -1,20 +1,20 @@
 <script lang="ts">
-  import hashjs from "hash.js";
+    import hashjs from "hash.js";
 
-  export let data: any;
+    export let allData: any;
 
-    $: hash = hashjs.sha256().update(JSON.stringify(data)).digest("hex");
+    $: hash = hashjs.sha256().update(JSON.stringify(allData)).digest("hex");
 
     function exportFile(): void {
         // create a new Blob object representing a new file
-        const file = new Blob([JSON.stringify(data)], {
+        const file = new Blob([JSON.stringify(allData)], {
             type: "text/plain",
         });
 
         // create a link element to simulate a click on the link
         const link = document.createElement("a");
         link.href = URL.createObjectURL(file);
-        link.download = `${data.data.date}_spielberichtsbogen_${data.data.title}.txt`;
+        link.download = `${allData.data.date}_spielberichtsbogen_${allData.data.title}.txt`;
 
         // simulate a click on the link to open the file dialog
         link.click();
@@ -55,7 +55,7 @@
                 <button
                         class="btn btn-primary"
                         on:click={() =>
-            (window.location.href = `?val=${JSON.stringify(data)}`)}
+            (window.location.href = `?val=${JSON.stringify(allData)}`)}
                 >In URL speichern
                 </button
                 >
@@ -64,17 +64,16 @@
                     werden
                 </p>
 
-                <!-- <label for="" class="form-label">Spielort</label> -->
                 <textarea
                         class="form-control my-3"
                         disabled
                         id="dataTextField"
                         type="text"
-                        value={JSON.stringify(data)}
+                        value={JSON.stringify(allData)}
                 />
 
-                <label class="form-label" for="">Hash:</label>
-                <textarea bind:value={hash} class="form-control" disabled type="text"/>
+                <label class="form-label" for="hashTextarea">Hash:</label>
+                <textarea bind:value={hash} class="form-control" disabled id="hashTextarea" type="text"/>
                 <p>
                     <i class="bi bi-info-circle"/> Der Hash kann beim Importieren genutzt
                     werden um die Daten zu validieren.

@@ -1,18 +1,18 @@
 <script lang="ts">
-  import type {data} from "../model/types";
+    import type {data} from "../model/types";
 
-  export let data: data;
+    export let metaInfo: data;
 
     function setDate(): void {
         const today = new Date();
-        data.date = `${today.getFullYear()}-${
+        metaInfo.date = `${today.getFullYear()}-${
             today.getMonth() + 1
         }-${today.getDate()}`;
     }
 
     function setStartTime(): void {
         const today = new Date();
-        data.startTime =
+        metaInfo.startTime =
             `0${today.getHours()}`.slice(-2) +
             ":" +
             `0${today.getMinutes()}`.slice(-2);
@@ -20,7 +20,7 @@
 
     function setEndTime(): void {
         const today = new Date();
-        data.endTime =
+        metaInfo.endTime =
             `0${today.getHours()}`.slice(-2) +
             ":" +
             `0${today.getMinutes()}`.slice(-2);
@@ -28,10 +28,11 @@
 </script>
 
 <div class="mb-3">
-    <label class="form-label" for="">Spielberichtsbogen</label>
+    <label class="form-label" for="titleInput">Spielberichtsbogen</label>
     <input
-            bind:value={data.title}
+            bind:value={metaInfo.title}
             class="form-control"
+            id="titleInput"
             placeholder="Veranstaltungstitel"
             type="text"
     />
@@ -39,7 +40,7 @@
 <div class="mb-3">
     <label class="form-label" for="locationTextarea">Spielort</label>
     <textarea
-            bind:value={data.location}
+            bind:value={metaInfo.location}
             class="form-control"
             id="locationTextarea"
             placeholder="Anschrift Veranstaltungsort"
@@ -50,32 +51,32 @@
 <div class="row">
     <div class="col-sm-4 col-xs-12">
         <div class="mb-3">
-            <label class="form-label" for="" on:click={setDate} on:keydown={setDate}
+            <label class="form-label" for="dateInput" on:click={setDate} on:keydown={setDate}
             >Datum</label
             >
-            <input bind:value={data.date} class="form-control" type="date"/>
+            <input bind:value={metaInfo.date} class="form-control" id="dateInput" type="date"/>
         </div>
     </div>
     <div class="col-sm-4 col-xs-12">
         <div class="mb-3">
             <label
                     class="form-label"
-                    for=""
+                    for="startTimeInput"
                     on:click={setStartTime}
                     on:keydown={setStartTime}>Beginn</label
             >
-            <input bind:value={data.startTime} class="form-control" type="time"/>
+            <input bind:value={metaInfo.startTime} class="form-control" id="startTimeInput" type="time"/>
         </div>
     </div>
     <div class="col-sm-4 col-xs-12">
         <div class="mb-3">
             <label
                     class="form-label"
-                    for=""
+                    for="endTimeInput"
                     on:click={setEndTime}
                     on:keydown={setEndTime}>Ende</label
             >
-            <input bind:value={data.endTime} class="form-control" type="time"/>
+            <input bind:value={metaInfo.endTime} class="form-control" id="endTimeInput" type="time"/>
         </div>
     </div>
 </div>
@@ -83,20 +84,20 @@
 <div class="row">
     <div class="col-sm-4 col-xs-12">
         <div class="mb-3">
-            <label class="form-label" for="">Chief-Kommisär</label>
-            <input bind:value={data.chiefReferee} class="form-control" type="text"/>
+            <label class="form-label" for="chiefRefereeInput">Chief-Kommisär</label>
+            <input bind:value={metaInfo.chiefReferee} class="form-control" id="chiefRefereeInput" type="text"/>
         </div>
     </div>
     <div class="col-sm-4 col-xs-12">
         <div class="mb-3">
-            <label class="form-label" for="">Kommissär</label>
-            <input bind:value={data.referee} class="form-control" type="text"/>
+            <label class="form-label" for="refereeInput">Kommissär</label>
+            <input bind:value={metaInfo.referee} class="form-control" id="refereeInput" type="text"/>
         </div>
     </div>
     <div class="col-sm-4 col-xs-12">
-        <label class="form-label" for="">Spielzeit</label>
+        <label class="form-label" for="durationInput">Spielzeit</label>
         <div class="input-group mb-3">
-            <input bind:value={data.duration} class="form-control" type="text"/>
+            <input bind:value={metaInfo.duration} class="form-control" id="durationInput" type="text"/>
             <span class="input-group-text">Minuten</span>
         </div>
     </div>
@@ -105,7 +106,7 @@
 <div class="mb-3">
     <label class="form-label" for="notPlayingTextarea">Spielfrei</label>
     <textarea
-            bind:value={data.notPlaying}
+            bind:value={metaInfo.notPlaying}
             class="form-control"
             id="notPlayingTextarea"
             placeholder="Spielfrei"

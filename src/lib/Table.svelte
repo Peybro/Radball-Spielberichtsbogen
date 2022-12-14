@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type Match from "../model/Match";
-  import Result from "../model/Result";
-  import type Team from "../model/Team";
+    import type Match from "../model/Match";
+    import Result from "../model/Result";
+    import type Team from "../model/Team";
 
-  export let teams: Team[];
-    export let list: Match[];
+    export let teamList: Team[];
+    export let matchList: Match[];
 
-    $: result = [...teams].map((team) => {
+    $: result = [...teamList].map((team) => {
         let games = 0;
         let wins = 0;
         let ties = 0;
@@ -14,7 +14,7 @@
         let goals = 0;
         let conceded = 0;
 
-        list.forEach((match) => {
+        matchList.forEach((match) => {
             if (team.Id === match.Team1Id && match.FinalScoreTeam1 !== undefined) {
                 games++;
                 if (match.FinalScoreTeam1 > match.FinalScoreTeam2) wins++;
@@ -47,20 +47,22 @@
 
 <div class="table-responsive">
     <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Mannschaft</th>
-            <th scope="col">Spiele</th>
-            <th scope="col">s</th>
-            <th scope="col">u</th>
-            <th scope="col">n</th>
-            <th scope="col">Punkte</th>
-            <th scope="col">Tore</th>
-            <th scope="col">GT</th>
-            <th scope="col">Diff.</th>
-        </tr>
-        </thead>
+        {#if sortedResult.length > 0}
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Mannschaft</th>
+                <th scope="col">Spiele</th>
+                <th scope="col">s</th>
+                <th scope="col">u</th>
+                <th scope="col">n</th>
+                <th scope="col">Punkte</th>
+                <th scope="col">Tore</th>
+                <th scope="col">GT</th>
+                <th scope="col">Diff.</th>
+            </tr>
+            </thead>
+        {/if}
         <tbody>
         {#each sortedResult as teamResult, index (`result-${index}`)}
             <tr>
@@ -75,6 +77,8 @@
                 <td>{teamResult.Conceded}</td>
                 <td>{teamResult.Difference}</td>
             </tr>
+        {:else}
+            <p>Noch keine Ergebnisse.</p>
         {/each}
         </tbody>
     </table>

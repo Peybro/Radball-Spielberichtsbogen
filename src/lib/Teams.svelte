@@ -1,21 +1,21 @@
 <script lang="ts">
-  import Team from "../model/Team";
-  import type Match from "../model/Match";
+    import Team from "../model/Team";
+    import type Match from "../model/Match";
 
-  import {createEventDispatcher} from "svelte";
+    import {createEventDispatcher} from "svelte";
 
-  const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-    export let teams: Team[];
-    export let list: Match[];
+    export let teamList: Team[];
+    export let matchList: Match[];
 
     function addNewTeam(): void {
-        teams = [...teams, new Team()];
+        teamList = [...teamList, new Team()];
         dispatch("createMatches");
     }
 
     function removeTeam(index: number): void {
-        teams = teams.filter((team, i) => i !== index);
+        teamList = teamList.filter((team, i) => i !== index);
         // TODO: bessere Lösung finden
         dispatch("createMatches");
     }
@@ -23,8 +23,8 @@
     export let editMode: boolean;
 </script>
 
-{#each teams as team, i}
-    <div class={editMode ? "" : "disabled"}>
+{#each teamList as team, i}
+    <div class:disabled={!editMode}>
         <div class="input-group mb-3">
             <input
                     type="text"
@@ -112,11 +112,13 @@
             <hr/>
         </div>
     </div>
+{:else}
+    <p>Noch keine Teams - füge welche hinzu.</p>
 {/each}
 {#if editMode}
     <button
             class={`btn btn-${
-      list.some(
+      matchList.some(
         (match) =>
           match.HalfTimeScoreTeam1 !== undefined ||
           match.HalfTimeScoreTeam2 !== undefined ||
@@ -126,8 +128,8 @@
         ? "warning"
         : "primary"
     } mb-3 w-100`}
-            on:click={() => addNewTeam()}
-    ><i class="bi bi-plus-circle"/>{list.some(
+            on:click={addNewTeam}
+    ><i class="bi bi-plus-circle"/>{matchList.some(
         (match) =>
             match.HalfTimeScoreTeam1 !== undefined ||
             match.HalfTimeScoreTeam2 !== undefined ||
@@ -140,7 +142,7 @@
 {/if}
 <button
         class={`btn btn-${editMode ? "primary" : "warning"} mb-3 w-100`}
-        disabled={teams.length === 0 || teams.some((team) => team.Name === "")}
+        disabled={teamList.length === 0 || teamList.some((team) => team.Name === "")}
         on:click={() => (editMode = !editMode)}
 >{editMode ? "Fertig" : "Bearbeiten"}</button
 >

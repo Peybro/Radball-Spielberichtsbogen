@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type {data} from "../model/types";
+    import type {data} from "../model/types";
 
-  export let data: data;
-    export let teams;
-    export let list;
+    export let metaInfo: data;
+    export let teamList;
+    export let matchList;
 
     function formatDate(date: string) {
         const tempDate = new Date(date);
@@ -13,30 +13,30 @@
     }
 
     function getTeamNameById(id: string) {
-        return teams.find((team) => team.Id === id).Name;
+        return teamList.find((team) => team.Id === id).Name;
     }
 </script>
 
 <div class="print">
-    <h3 id="title">{data.title}</h3>
+    <h3 id="title">{metaInfo.title}</h3>
     <section class="row" id="info">
         <div class="col-2"/>
         <div class="col-auto mb-2" id="location">
-            <div>Spieltag am {formatDate(data.date)} {data.startTime} Uhr</div>
-            {#each data.location.split("\n") as line}
+            <div>Spieltag am {formatDate(metaInfo.date)} {metaInfo.startTime} Uhr</div>
+            {#each metaInfo.location.split("\n") as line}
                 <div>{line}</div>
             {/each}
         </div>
         <div>
-            <span id="chief">Chief-Kommissär: {data.chiefReferee}</span><span
-                id="referees">Kommissär: {data.referee}</span
+            <span id="chief">Chief-Kommissär: {metaInfo.chiefReferee}</span><span
+                id="referees">Kommissär: {metaInfo.referee}</span
         >
         </div>
-        <div id="duration">Spielzeit: {data.duration} Minuten</div>
+        <div id="duration">Spielzeit: {metaInfo.duration} Minuten</div>
         <div class="row" id="notPlaying">
             <div class="col-2">Spielfrei:</div>
             <div class="col-auto">
-                {#each data.notPlaying.split("\n") as line}
+                {#each metaInfo.notPlaying.split("\n") as line}
                     <div>{line}</div>
                 {/each}
             </div>
@@ -56,7 +56,7 @@
             </tr>
             </thead>
             <tbody>
-            {#each list as match, i}
+            {#each matchList as match, i}
                 <tr>
                     <td>{i + 1}.</td>
                     <td>{getTeamNameById(match.Team1Id)}</td>

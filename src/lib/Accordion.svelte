@@ -1,18 +1,18 @@
 <script lang="ts">
-  import {createEventDispatcher} from "svelte";
-  import Header from "./Header.svelte";
-  import Teams from "./Teams.svelte";
-  import Order from "./Order.svelte";
-  import Table from "./Table.svelte";
-  import type Team from "../model/Team";
-  import type Match from "../model/Match";
-  import type {data} from "../model/types";
+    import {createEventDispatcher} from "svelte";
+    import Header from "./Header.svelte";
+    import Teams from "./Teams.svelte";
+    import Order from "./Order.svelte";
+    import Table from "./Table.svelte";
+    import type Team from "../model/Team";
+    import type Match from "../model/Match";
+    import type {data} from "../model/types";
 
-  const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-    export let data: data;
-    export let teams: Team[];
-    export let list: Match[];
+    export let metaInfo: data;
+    export let teamList: Team[];
+    export let matchList: Match[];
 
     export let editMode: boolean;
 </script>
@@ -26,13 +26,13 @@
                     data-bs-toggle="collapse"
                     type="button"
             >
-                Infos {data.title !== "" ? `zu ${data.title}` : ""}
+                Infos {metaInfo.title !== "" ? `zu ${metaInfo.title}` : ""}
             </button>
         </h2>
         <div class="accordion-collapse collapse show" id="collapseInfo">
             <!-- {data-bs-parent="#main-accordion"} -->
             <div class="accordion-body">
-                <Header bind:data/>
+                <Header bind:metaInfo/>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
                     data-bs-toggle="collapse"
                     type="button"
             >
-                Mannschaften {`(${teams.length})`}
+                Mannschaften {`(${teamList.length})`}
             </button>
         </h2>
         <div class="accordion-collapse collapse show" id="collapseTeams">
@@ -52,8 +52,8 @@
             <div class="accordion-body">
                 <Teams
                         bind:editMode
-                        bind:teams
-                        {list}
+                        bind:teamList
+                        {matchList}
                         on:createMatches={() => dispatch("createMatches")}
                 />
             </div>
@@ -68,22 +68,22 @@
                     type="button"
             >
                 Spielfolge {`(${
-                list.filter(
+                matchList.filter(
                     (match) =>
                         match.FinalScoreTeam1 != undefined &&
                         match.FinalScoreTeam2 != undefined
                 ).length
-            }/${list.length})`}
+            }/${matchList.length})`}
             </button>
         </h2>
         <div class="accordion-collapse collapse" id="collapseMatches">
             <!-- {data-bs-parent="#main-accordion"} -->
             <div class="accordion-body">
                 <Order
-                        bind:list
+                        bind:matchList
                         on:removeMatch={(e) =>
             dispatch("removeMatch", { matchId: e.detail.matchId })}
-                        {teams}
+                        {teamList}
                 />
             </div>
         </div>
@@ -102,7 +102,7 @@
         <div class="accordion-collapse collapse" id="collapseTable">
             <!-- {data-bs-parent="#main-accordion"} -->
             <div class="accordion-body">
-                <Table {list} {teams}/>
+                <Table {matchList} {teamList}/>
             </div>
         </div>
     </div>

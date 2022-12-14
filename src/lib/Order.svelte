@@ -1,15 +1,15 @@
 <script lang="ts">
-  import {createEventDispatcher} from "svelte";
-  import type Match from "../model/Match";
-  import type Team from "../model/Team";
+    import {createEventDispatcher} from "svelte";
+    import type Match from "../model/Match";
+    import type Team from "../model/Team";
 
-  export let teams: Team[];
-    export let list: Match[];
+    export let teamList: Team[];
+    export let matchList: Match[];
 
     const dispatch = createEventDispatcher();
 
     function getTeamNameById(teamId: string) {
-        return teams.find((team: any) => team.Id === teamId).Name;
+        return teamList.find((team: any) => team.Id === teamId).Name;
     }
 
     let isDragging = false;
@@ -47,12 +47,12 @@
 
         // insert at index
         if (startIndex !== currentIndex) {
-            let draggedItem = list[startIndex];
-            list = [...list.slice(0, startIndex), ...list.slice(startIndex + 1)];
-            list = [
-                ...list.slice(0, currentIndex),
+            let draggedItem = matchList[startIndex];
+            matchList = [...matchList.slice(0, startIndex), ...matchList.slice(startIndex + 1)];
+            matchList = [
+                ...matchList.slice(0, currentIndex),
                 draggedItem,
-                ...list.slice(currentIndex),
+                ...matchList.slice(currentIndex),
             ];
         }
     }
@@ -82,18 +82,20 @@
 
 <hr/>
 
-<div class="d-none d-md-block">
-    <div class="row">
-        <div class="col-6"/>
-        <div class="col text-center">Halbzeit</div>
-        <div class="col text-center">Endstand</div>
-        <div class="col text-center">Kommissär</div>
-        <div class={`${deleteMode ? "col-2" : "d-none"}`}/>
+{#if matchList.length > 0}
+    <div class="d-none d-md-block">
+        <div class="row">
+            <div class="col-6"/>
+            <div class="col text-center">Halbzeit</div>
+            <div class="col text-center">Endstand</div>
+            <div class="col text-center">Kommissär</div>
+            <div class={`${deleteMode ? "col-2" : "d-none"}`}/>
+        </div>
     </div>
-</div>
+{/if}
 
 <div class="list-group">
-    {#each list as match, index (`match-${index}`)}
+    {#each matchList as match, index (`match-${index}`)}
         <li
                 class="list-group-item pt-2"
                 draggable={editMode}
@@ -209,6 +211,8 @@
                 {/if}
             </div>
         </li>
+    {:else}
+        <p>Noch keine Spiele - füge Mannschaften hinzu um welche zu generieren.</p>
     {/each}
 </div>
 

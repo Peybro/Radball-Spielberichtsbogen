@@ -1,14 +1,14 @@
 <script lang="ts">
-  import hashjs from "hash.js";
-  import {createEventDispatcher} from "svelte";
+    import hashjs from "hash.js";
+    import {createEventDispatcher} from "svelte";
 
-  const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-    let data: string;
+    let allData: string;
     $: hash =
-        data === undefined || data === ""
+        allData === undefined || allData === ""
             ? ""
-            : hashjs.sha256().update(data).digest("hex");
+            : hashjs.sha256().update(allData).digest("hex");
 
     let userHash: string;
     let hashValid: boolean;
@@ -29,7 +29,7 @@
                     const reader = new FileReader();
                     reader.readAsText(file, "UTF-8");
                     reader.onload = function (event) {
-                        data = <string>event.target.result;
+                        allData = <string>event.target.result;
                     };
                     reader.onerror = function (event) {
                         console.error("Failed to read file.");
@@ -81,7 +81,7 @@
 
                 <!-- <label for="" class="form-label">Spielort</label> -->
                 <textarea
-                        bind:value={data}
+                        bind:value={allData}
                         class="form-control my-3"
                         id="dataTextField"
                         on:input={() => (hashValid = undefined)}
@@ -108,8 +108,8 @@
                   > -->
                 <button
                         class="btn btn-primary"
-                        disabled={data === undefined || data === ""}
-                        on:click={() => dispatch("import", { data: data })}
+                        disabled={allData === undefined || allData === ""}
+                        on:click={() => dispatch("import", { data: allData })}
                 >In Anwendung übertragen
                 </button
                 >
