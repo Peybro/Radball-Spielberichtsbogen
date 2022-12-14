@@ -11,3 +11,6 @@ export const metaInfo = writable({
   duration: "2 x 7",
   notPlaying: "",
 });
+
+export const teamList = writable([]);
+export const matchList = writable([]);
