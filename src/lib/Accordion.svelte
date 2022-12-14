@@ -13,7 +13,7 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingInfo">
       <button
-        class="accordion-button"
+        class="accordion-button collapsed"
         data-bs-target="#collapseInfo"
         data-bs-toggle="collapse"
         type="button"
