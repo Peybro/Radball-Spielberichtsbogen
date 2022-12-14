@@ -1,112 +1,125 @@
 <script lang="ts">
-  import type { data } from "../model/types";
+    import type {data} from "../model/types";
 
-  export let data: data;
+    export let metaInfo: data;
 
-  function setDate(): void {
-    const today = new Date();
-    data.date = `${today.getFullYear()}-${
-      today.getMonth() + 1
-    }-${today.getDate()}`;
-  }
+    function setDate(): void {
+        const today = new Date();
+        metaInfo.date = `${today.getFullYear()}-${
+            today.getMonth() + 1
+        }-${today.getDate()}`;
+    }
 
-  function setStartTime(): void {
-    const today = new Date();
-    data.startTime =
-      `0${today.getHours()}`.slice(-2) +
-      ":" +
-      `0${today.getMinutes()}`.slice(-2);
-  }
+    function setStartTime(): void {
+        const today = new Date();
+        metaInfo.startTime =
+            `0${today.getHours()}`.slice(-2) +
+            ":" +
+            `0${today.getMinutes()}`.slice(-2);
+    }
 
-  function setEndTime(): void {
-    const today = new Date();
-    data.endTime =
-      `0${today.getHours()}`.slice(-2) +
-      ":" +
-      `0${today.getMinutes()}`.slice(-2);
-  }
+    function setEndTime(): void {
+        const today = new Date();
+        metaInfo.endTime =
+            `0${today.getHours()}`.slice(-2) +
+            ":" +
+            `0${today.getMinutes()}`.slice(-2);
+    }
 </script>
 
 <div class="mb-3">
-  <label for="" class="form-label">Spielberichtsbogen</label>
-  <input
-    type="text"
-    class="form-control"
-    placeholder="Veranstaltungstitel"
-    bind:value={data.title}
-  />
+    <label class="form-label" for="titleInput">Spielberichtsbogen</label>
+    <input
+            bind:value={metaInfo.title}
+            class="form-control"
+            id="titleInput"
+            placeholder="Veranstaltungstitel"
+            type="text"
+    />
 </div>
 <div class="mb-3">
-  <label for="" class="form-label">Spielort</label>
-  <textarea
-    type="text"
-    class="form-control"
-    placeholder="Anschrift Veranstaltungsort"
-    bind:value={data.location}
-  />
+    <label class="form-label" for="locationTextarea">Spielort</label>
+    <textarea
+            bind:value={metaInfo.location}
+            class="form-control"
+            id="locationTextarea"
+            placeholder="Anschrift Veranstaltungsort"
+            type="text"
+    />
 </div>
 
 <div class="row">
-  <div class="col-sm-4 col-xs-12">
-    <div class="mb-3">
-      <label for="" class="form-label" on:click={setDate} on:keydown={setDate}
-        >Datum</label
-      >
-      <input type="date" class="form-control" bind:value={data.date} />
+    <div class="col-sm-4 col-xs-12">
+        <div class="mb-3">
+            <label class="form-label" for="dateInput" on:click={setDate} on:keydown={setDate}
+            >Datum</label
+            >
+            <input bind:value={metaInfo.date} class="form-control" id="dateInput" type="date"/>
+        </div>
     </div>
-  </div>
-  <div class="col-sm-4 col-xs-12">
-    <div class="mb-3">
-      <label
-        for=""
-        class="form-label"
-        on:click={setStartTime}
-        on:keydown={setStartTime}>Beginn</label
-      >
-      <input type="time" class="form-control" bind:value={data.startTime} />
+    <div class="col-sm-4 col-xs-12">
+        <div class="mb-3">
+            <label
+                    class="form-label"
+                    for="startTimeInput"
+                    on:click={setStartTime}
+                    on:keydown={setStartTime}>Beginn</label
+            >
+            <input bind:value={metaInfo.startTime} class="form-control" id="startTimeInput" type="time"/>
+        </div>
     </div>
-  </div>
-  <div class="col-sm-4 col-xs-12">
-    <div class="mb-3">
-      <label
-        for=""
-        class="form-label"
-        on:click={setEndTime}
-        on:keydown={setEndTime}>Ende</label
-      >
-      <input type="time" class="form-control" bind:value={data.endTime} />
+    <div class="col-sm-4 col-xs-12">
+        <div class="mb-3">
+            <label
+                    class="form-label"
+                    for="endTimeInput"
+                    on:click={setEndTime}
+                    on:keydown={setEndTime}>Ende</label
+            >
+            <input bind:value={metaInfo.endTime} class="form-control" id="endTimeInput" type="time"/>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="row">
-  <div class="col-sm-4 col-xs-12">
-    <div class="mb-3">
-      <label for="" class="form-label">Chief-Kommisär</label>
-      <input type="text" class="form-control" bind:value={data.chiefReferee} />
+    <div class="col-sm-4 col-xs-12">
+        <div class="mb-3">
+            <label class="form-label" for="chiefRefereeInput">Chief-Kommisär</label>
+            <input bind:value={metaInfo.chiefReferee} class="form-control" id="chiefRefereeInput" type="text"/>
+        </div>
     </div>
-  </div>
-  <div class="col-sm-4 col-xs-12">
-    <div class="mb-3">
-      <label for="" class="form-label">Kommissär</label>
-      <input type="text" class="form-control" bind:value={data.referee} />
+    <div class="col-sm-4 col-xs-12">
+        <div class="mb-3">
+            <label class="form-label" for="refereeInput">Kommissär</label>
+            <input bind:value={metaInfo.referee} class="form-control" id="refereeInput" type="text"/>
+        </div>
     </div>
-  </div>
-  <div class="col-sm-4 col-xs-12">
-    <label for="" class="form-label">Spielzeit</label>
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" bind:value={data.duration} />
-      <span class="input-group-text">Minuten</span>
+    <div class="col-sm-4 col-xs-12">
+        <label class="form-label" for="durationInput">Spielzeit</label>
+        <div class="input-group mb-3">
+            <input bind:value={metaInfo.duration} class="form-control" id="durationInput" type="text"/>
+            <span class="input-group-text">Minuten</span>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="mb-3">
-  <label for="" class="form-label">Spielfrei</label>
-  <textarea
-    type="text"
-    class="form-control"
-    placeholder="Spielfrei"
-    bind:value={data.notPlaying}
-  />
+    <label class="form-label" for="notPlayingTextarea">Spielfrei</label>
+    <textarea
+            bind:value={metaInfo.notPlaying}
+            class="form-control"
+            id="notPlayingTextarea"
+            placeholder="Spielfrei"
+            type="text"
+    />
 </div>
+
+<style>
+    #locationTextarea {
+        height: 6rem;
+    }
+
+    #notPlayingTextarea {
+        height: 6rem;
+    }
+</style>
