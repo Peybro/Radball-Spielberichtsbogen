@@ -22,7 +22,7 @@ export default defineConfig({
       manifest: {
         short_name: "Spielmanager",
         name: "Spielberichtsbogen",
-        start_url: "/spiel",
+        start_url: "/spiel/",
         icons: [
           {
             src: "/android-chrome-512x512.png",
