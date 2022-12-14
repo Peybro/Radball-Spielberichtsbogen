@@ -1,7 +1,7 @@
 import {v4 as uuidv4} from "uuid";
 
 export default class Result {
-    private id: string;
+    private readonly id: string;
 
     constructor(
         private team: string,

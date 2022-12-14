@@ -217,15 +217,6 @@
 </div>
 
 <style>
-    .list {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .listItem {
-        padding: 8px;
-        cursor: pointer;
-    }
 
     li.dragging {
         opacity: 0.8;
