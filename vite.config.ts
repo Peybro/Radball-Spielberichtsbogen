@@ -23,14 +23,7 @@ export default defineConfig({
         short_name: "Spielmanager",
         name: "Spielberichtsbogen",
         start_url: "/spiel/",
-        icons: [
-          {
-            src: "/android-chrome-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable",
-          },
-        ],
+        icons: [],
         theme_color: "#111111",
         background_color: "#3367D6",
         display: "standalone",
