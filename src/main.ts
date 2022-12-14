@@ -5,7 +5,7 @@ import * as bootstrap from "bootstrap";
 import App from "./App.svelte";
 
 const app = new App({
-  target: document.getElementById("app"),
+  target: <Element>document.getElementById("app"),
 });
 
 export default app;
