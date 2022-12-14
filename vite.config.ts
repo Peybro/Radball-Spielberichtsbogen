@@ -15,13 +15,28 @@ export default defineConfig({
       includeAssets: [
         "favicon.png",
         "apple-touch-icon.png",
-        "vite.svg"
+        "vite.svg",
+        "android-chrome-192x192.png",
+        "android-chrome-512x512.png",
       ],
       manifest: {
         short_name: "Spielmanager",
         name: "Spielberichtsbogen",
         start_url: "/spiel/",
-        icons: [],
+        icons: [
+          {
+            src: "/android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+          {
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+        ],
         theme_color: "#111111",
         background_color: "#3367D6",
         display: "standalone",
