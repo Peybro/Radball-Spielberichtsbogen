@@ -26,6 +26,8 @@
       } catch (err) {
         console.error(err);
       }
+    } else {
+      // TODO: evtl LocalStorage einspielen
     }
   });
 
@@ -95,6 +97,14 @@
 
 <main>
   <div class="container py-4">
+    <div class="d-flex justify-content-between">
+      <h1>Spielberichtsbogen</h1>
+      <button class="btn">
+        <h1>
+          <i class="bi bi-list" />
+        </h1>
+      </button>
+    </div>
     <Accordion bind:editMode />
     <div class="mt-3">
       <ImportModal on:import={(e) => importData(e.detail.data)} />

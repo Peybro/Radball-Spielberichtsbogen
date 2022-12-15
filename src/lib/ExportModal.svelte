@@ -1,6 +1,6 @@
 <script lang="ts">
   import hashjs from "hash.js";
-  import { metaInfo, teamList, matchList } from "./../stores/store";
+  import { metaInfo, teamList, matchList, localSaves } from "./../stores/store";
 
   //? Warum geht das wenn alle Felder privat sind; sind js Klassen einfach Objekte?
   //   $: allDataAsObject = {
@@ -9,7 +9,7 @@
   //     matches: $matchList,
   //   };
   $: allDataAsObject = {
-    data: $metaInfo,
+    data: { ...$metaInfo },
     teams: [...$teamList].map((team) => team.toObject()),
     matches: [...$matchList].map((match) => match.toObject()),
   };
@@ -75,6 +75,13 @@
           <i class="bi bi-info-circle" /> Seite kann bei URL Export sicher verlassen
           werden
         </p>
+
+        <button
+          class="btn btn-primary"
+          on:click={() =>
+            localSaves.update((prev) => [...prev, allDataAsObject])}
+          >LocalStorage</button
+        >
 
         <textarea
           class="form-control my-3"

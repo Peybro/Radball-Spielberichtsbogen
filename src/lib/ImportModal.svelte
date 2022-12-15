@@ -1,6 +1,7 @@
 <script lang="ts">
   import hashjs from "hash.js";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
+  import { localSaves } from "../stores/store";
 
   const dispatch = createEventDispatcher();
 
@@ -74,9 +75,36 @@
         <button class="btn-close" data-bs-dismiss="modal" type="button" />
       </div>
       <div class="modal-body">
+        <ul class="list-group mb-3">
+          {#each $localSaves as save, i}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-start"
+              type="button"
+              on:click={() => (allData = JSON.stringify(save))}
+              on:keydown={() => (allData = JSON.stringify(save))}
+            >
+              <div class="ms-2 me-auto">
+                <div class="fw-bold">{save.data.title}</div>
+                {save.data.date}
+              </div>
+              <button
+                class="btn btn-danger"
+                on:click={() =>
+                  ($localSaves = [...$localSaves].filter((item, j) => j !== i))}
+              >
+                <i class="bi bi-trash" />
+              </button>
+            </li>
+          {:else}
+            <p>Keine lokalen Speicherstände</p>
+          {/each}
+        </ul>
+
         <button class="btn btn-primary" on:click={() => importFile()}
           >Aus Datei Importieren
         </button>
+
+        <hr />
 
         <!-- <label for="" class="form-label">Spielort</label> -->
         <textarea
