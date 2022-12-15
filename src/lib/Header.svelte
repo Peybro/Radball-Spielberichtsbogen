@@ -26,7 +26,7 @@
 </script>
 
 <div class="mb-3">
-  <label class="form-label" for="titleInput">Spielberichtsbogen</label>
+  <label class="form-label" for="titleInput">Veranstaltungstitel</label>
   <input
     bind:value={$metaInfo.title}
     class="form-control"

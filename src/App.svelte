@@ -4,7 +4,7 @@
   import ImportModal from "./lib/ImportModal.svelte";
   import Print from "./lib/Print.svelte";
   import Match from "./model/Match";
-  import { onMount, beforeUpdate } from "svelte";
+  import { onMount } from "svelte";
   import Team from "./model/Team";
 
   import { metaInfo, teamList, matchList } from "./stores/store";
@@ -26,20 +26,9 @@
       } catch (err) {
         console.error(err);
       }
+    } else {
+      // TODO: evtl LocalStorage einspielen
     }
-  });
-
-  beforeUpdate(() => {
-    console.log($metaInfo, $teamList, $matchList);
-
-    localStorage.setItem(
-      "allData",
-      JSON.stringify({
-        metaInfo: $metaInfo,
-        teams: $teamList,
-        matches: $matchList,
-      })
-    );
   });
 
   function importData(jsonString: string): void {
@@ -108,6 +97,14 @@
 
 <main>
   <div class="container py-4">
+    <div class="d-flex justify-content-between">
+      <h1>Spielberichtsbogen</h1>
+      <button class="btn">
+        <h1>
+          <i class="bi bi-list" />
+        </h1>
+      </button>
+    </div>
     <Accordion bind:editMode />
     <div class="mt-3">
       <ImportModal on:import={(e) => importData(e.detail.data)} />
