@@ -75,9 +75,10 @@
   }
 
   function resetData(): void {
-    $metaInfo = initialMetaInfo;
-    $teamList = initialTeamList;
-    $matchList = initialMatchList;
+    //? WTF??
+    $metaInfo = { ...initialMetaInfo, title: "", location: "" };
+    $teamList = [...initialTeamList];
+    $matchList = [...initialMatchList];
 
     editMode = true;
     resetMode = false;
