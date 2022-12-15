@@ -94,13 +94,16 @@
       <i class="bi bi-question-circle" /> Alles exportiert was du behalten willst?
     </div>
   {/if}
-  <div class="w-100" id="signature">
-    <div>❤️ Made by Thomas K.</div>
-    <div class="ms-1 d-flex justify-content-start">
+  <div id="signature">
+    <div>
+      <i class="bi bi-chat-right-heart" />
+      <span class="ms-1">Made by Thomas K.</span>
+    </div>
+    <div class="d-flex justify-content-start">
       <a href="https://github.com/Peybro/spielberichtsbogen"
         ><i class="bi bi-github" /></a
       >
-      <span class="ms-2">v0.2.1</span>
+      <span class="ms-2">v0.2.7</span>
     </div>
   </div>
 </div>
