@@ -4,7 +4,7 @@
   import ImportModal from "./lib/ImportModal.svelte";
   import Print from "./lib/Print.svelte";
   import Match from "./model/Match";
-  import { onMount } from "svelte";
+  import { onMount, beforeUpdate } from "svelte";
   import Team from "./model/Team";
 
   import { metaInfo, teamList, matchList } from "./stores/store";
@@ -27,6 +27,19 @@
         console.error(err);
       }
     }
+  });
+
+  beforeUpdate(() => {
+    console.log($metaInfo, $teamList, $matchList);
+
+    localStorage.setItem(
+      "allData",
+      JSON.stringify({
+        metaInfo: $metaInfo,
+        teams: $teamList,
+        matches: $matchList,
+      })
+    );
   });
 
   function importData(jsonString: string): void {
