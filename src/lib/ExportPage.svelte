@@ -6,6 +6,7 @@
     metaInfo,
     teamList,
   } from "../stores/contentStore";
+  import { importMode, exportMode } from "../stores/booleanStore";
 
   //? Warum geht das wenn alle Felder privat sind; sind js Klassen einfach Objekte?
   //   $: allDataAsObject = {
@@ -38,13 +39,34 @@
     // simulate a click on the link to open the file dialog
     link.click();
   }
+
+  import { toasts, ToastContainer, BootstrapToast } from "svelte-toasts";
+
+  function showSuccessToast() {
+    const toast = toasts.add({
+      title: "Speichern erfolgreich",
+      description: "Schau zu Import um alle gespeicherten Bögen zu sehen",
+      duration: 4000, // 0 or negative to avoid auto-remove
+      placement: "top-right",
+      theme: "dark",
+      type: "success",
+      showProgress: true,
+      onClick: () => {
+        $importMode = true;
+        $exportMode = false;
+      },
+    });
+  }
 </script>
 
 <div>
   <div class="d-flex justify-content-start">
     <button
       class="btn btn-primary"
-      on:click={() => localSaves.update((prev) => [...prev, allDataAsObject])}
+      on:click={() => {
+        localSaves.update((prev) => [...prev, allDataAsObject]);
+        showSuccessToast();
+      }}
       >Im Browser speichern
     </button>
     <button class="btn btn-primary mx-2" on:click={() => exportFile()}
@@ -83,6 +105,9 @@
     um die Daten zu validieren.
   </p>
 </div>
+<ToastContainer placement="top-right" let:data>
+  <BootstrapToast {data} />
+</ToastContainer>
 
 <style>
   #dataTextField {
