@@ -9,6 +9,8 @@ export const metaInfo = writable(initialMetaInfo);
 export const teamList = writable(initialTeamList);
 export const matchList = writable(initialMatchList);
 
+export const matchToImport = writable("");
+
 export const localSaves = writable(
   JSON.parse(localStorage.getItem("allData")) || []
 );

@@ -10,6 +10,7 @@
   import { exportMode, importMode, menuMode } from "./stores/booleanStore";
   import { matchList, metaInfo, teamList } from "./stores/contentStore";
   import Offcanvas from "./lib/Offcanvas.svelte";
+  import Navigation from "./lib/Navigation.svelte";
 
   let editMode = true;
 

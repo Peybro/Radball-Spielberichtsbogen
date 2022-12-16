@@ -1,13 +1,13 @@
 <script lang="ts">
   import hashjs from "hash.js";
   import { createEventDispatcher } from "svelte";
-  import { localSaves } from "../stores/contentStore";
+  import { localSaves, matchToImport } from "../stores/contentStore";
   import { importMode, menuMode } from "../stores/booleanStore";
+  import Navigation from "./Navigation.svelte";
 
   const dispatch = createEventDispatcher();
 
-  let allData = "";
-  $: hash = hashjs.sha256().update(allData).digest("hex") || "";
+  $: hash = hashjs.sha256().update($matchToImport).digest("hex") || "";
 
   let userHash: string;
   let hashValid: boolean;
@@ -30,7 +30,7 @@
           const reader = new FileReader();
           reader.readAsText(file, "UTF-8");
           reader.onload = function (event) {
-            allData = <string>event.target.result;
+            $matchToImport = <string>event.target.result;
           };
           reader.onerror = function (event) {
             console.error("Failed to read file.");
@@ -46,7 +46,7 @@
 
   function handleDataImport() {
     try {
-      dispatch("import", { data: allData });
+      dispatch("import", { data: $matchToImport });
       $menuMode = false;
       $importMode = false;
     } catch (err) {
@@ -127,22 +127,41 @@
 
   <div class="accordion mb-2" id="localSavesAccordion">
     <div class="accordion-item">
-      <h2 class="accordion-header" id="headingOne">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapsePresaves"
+        >
+          Fertige Sicherungen
+        </button>
+      </h2>
+      <div
+        id="collapsePresaves"
+        class="accordion-collapse collapse"
+        data-bs-parent="#localSavesAccordion"
+      >
+        <div class="accordion-body">
+          <Navigation />
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
         <button
           class="accordion-button"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#collapseOne"
-          aria-expanded="true"
-          aria-controls="collapseOne"
+          data-bs-target="#collapseLokalSaves"
         >
-          Speicherungen in lokalem Speicher
+          Sicherungen in lokalem Speicher
         </button>
       </h2>
       <div
-        id="collapseOne"
+        id="collapseLokalSaves"
         class="accordion-collapse collapse show"
-        aria-labelledby="headingOne"
         data-bs-parent="#localSavesAccordion"
       >
         <div class="accordion-body">
@@ -159,8 +178,8 @@
               <li
                 class="list-group-item d-flex justify-content-between align-items-start align-items-center"
                 type="button"
-                on:click={() => (allData = JSON.stringify(save))}
-                on:keydown={() => (allData = JSON.stringify(save))}
+                on:click={() => ($matchToImport = JSON.stringify(save))}
+                on:keydown={() => ($matchToImport = JSON.stringify(save))}
                 draggable={editSavesMode && $localSaves.length > 1}
                 class:dragging={isDragging && currentIndex === i}
                 on:touchstart={(e) => handleDragStart(e, i)}
@@ -210,12 +229,12 @@
     </button>
     <button
       class="btn btn-danger ms-1"
-      disabled={allData === undefined || allData === ""}
+      disabled={$matchToImport === undefined || $matchToImport === ""}
       on:click={handleDataImport}
       >In Anwendung übertragen
     </button>
   </div>
-  {#if !(allData === undefined || allData === "")}
+  {#if !($matchToImport === undefined || $matchToImport === "")}
     <div class="text-end">
       <i class="bi bi-info-circle" /> Achtung, das wird alle ungespeicherten Daten
       überschreiben
@@ -224,7 +243,7 @@
 
   <!-- <label for="" class="form-label">Spielort</label> -->
   <textarea
-    bind:value={allData}
+    bind:value={$matchToImport}
     class="form-control my-3"
     id="dataTextField"
     on:input={() => (hashValid = undefined)}
