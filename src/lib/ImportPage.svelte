@@ -2,7 +2,7 @@
   import hashjs from "hash.js";
   import { createEventDispatcher } from "svelte";
   import { localSaves, matchToImport } from "../stores/contentStore";
-  import { importMode, menuMode } from "../stores/booleanStore";
+  import { mainMode, menuMode } from "../stores/booleanStore";
   import Navigation from "./Navigation.svelte";
 
   const dispatch = createEventDispatcher();
@@ -48,7 +48,7 @@
     try {
       dispatch("import", { data: $matchToImport });
       $menuMode = false;
-      $importMode = false;
+      $mainMode = true;
     } catch (err) {
       showInValidData = true;
       setTimeout(() => {

@@ -86,32 +86,54 @@
     } else {
       console.log("No such document!");
     }
+
+    // console.log(table);
   });
+
+  function getPlayedDays() {
+    return "x"
+  }
 </script>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Mannschaft</th>
-      <th>Tore</th>
-      <th />
-      <th>Punkte</th>
-      <th>Spiele</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each table
-      .sort((a, b) => b.Difference - a.Difference)
-      .sort((a, b) => b.Points - a.Points) as team, i}
+<h3>{$bigTableLiga.toUpperCase()} nach dem {getPlayedDays()}. Spieltag</h3>
+<div class="table-responsive">
+  <table class="table table-sm">
+    <thead>
       <tr>
-        <td>{i + 1}</td>
-        <td>{team.team}</td>
-        <td>{team.goals}:{team.gegenGoals}</td>
-        <td>({team.difference})</td>
-        <td><span class="fw-bold">{team.points}</span></td>
-        <td>{team.games}</td>
+        <th scope="col">#</th>
+        <th scope="col">Mannschaft</th>
+        <th scope="col">Tore</th>
+        <th scope="col" />
+        <th scope="col">Punkte</th>
+        <th scope="col">Spiele</th>
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each table
+        .sort((a, b) => b.difference - a.difference)
+        .sort((a, b) => b.points - a.points) as team, i}
+        <tr>
+          <th scope="row">{i + 1}.</th>
+          <td>{team.team}</td>
+          <td>{team.goals} : {team.gegenGoals}</td>
+          <td>({team.difference > 0 ? "+" : ""}{team.difference})</td>
+          <td><span class="fw-bold">{team.points}</span></td>
+          <td>{team.games}</td>
+        </tr>
+      {/each}
+      <tr>
+        <td />
+        <td />
+        <td
+          >{table.length > 0 ? table.reduce((a, b) => a.goals + b.goals) : ""} :
+          {table.length > 0
+            ? table.reduce((a, b) => a.gegenGoals + b.gegenGoals)
+            : ""}</td
+        >
+        <td />
+        <td />
+        <td />
+      </tr>
+    </tbody>
+  </table>
+</div>
