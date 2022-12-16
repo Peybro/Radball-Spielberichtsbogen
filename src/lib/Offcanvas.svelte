@@ -25,20 +25,20 @@
 </script>
 
 <div
-  class="ofc bg-dark container-fluid py-4 px-4"
+  class="ofc bg-dark container py-4 px-4 text-light"
   style={$menuRight ? "right:0" : "left:0"}
   transition:fly={{ x: $menuRight ? 1000 : -1000, duration: 200 }}
 >
   <div class="d-flex justify-content-between align-items-center">
     <button class="btn fs-4" on:click={() => ($menuRight = !$menuRight)}>
-      <i class="bi bi-arrow-left-right" />
+      <i class="bi bi-arrow-left-right text-light" />
     </button>
     <button
       class={`btn ${$menuRight ? "order-last pe-0" : "order-first ps-0"}`}
       on:click={() => ($menuMode = false)}
     >
       <h1>
-        <i class="bi bi-list" />
+        <i class="bi bi-list text-light" />
       </h1>
     </button>
   </div>
@@ -103,7 +103,7 @@
       <a href="https://github.com/Peybro/spielberichtsbogen"
         ><i class="bi bi-github" /></a
       >
-      <span class="ms-2">v0.2.7</span>
+      <span class="ms-2">v1.0.7</span>
     </div>
   </div>
 </div>

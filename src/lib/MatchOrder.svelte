@@ -70,7 +70,8 @@
   <div><i class="bi bi-info-circle" /> Spiele per Drag and Drop anordnen.</div>
 {/if}
 <button class="btn btn-primary my-1" on:click={handleEditButton}
-  >{editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
+  >{#if !editMode}<i class="bi bi-pencil-square" />{/if}
+  {editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
 >
 {#if editMode}
   <button

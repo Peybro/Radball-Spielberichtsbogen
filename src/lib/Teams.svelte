@@ -33,7 +33,7 @@
 </script>
 
 {#each $teamList as team, i}
-  <div class:disabled={!editMode}>
+  <div class={!editMode ? "disabled" : ""}>
     <div class="input-group mb-3">
       <input
         type="text"
@@ -156,3 +156,10 @@
   on:click={() => (editMode = !editMode)}
   >{editMode ? "Fertig" : "Bearbeiten"}</button
 >
+
+<style>
+  .disabled {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+</style>

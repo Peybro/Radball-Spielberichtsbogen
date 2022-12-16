@@ -40,33 +40,128 @@
     link.click();
   }
 
-  import { toasts, ToastContainer, BootstrapToast } from "svelte-toasts";
+  $: multipleSaves = $localSaves.filter(
+    (save, i) =>
+      save.data.title === $metaInfo.title && save.data.date === $metaInfo.date
+  );
 
-  function showSuccessToast() {
-    const toast = toasts.add({
-      title: "Speichern erfolgreich",
-      description: "Schau zu Import um alle gespeicherten Bögen zu sehen",
-      duration: 4000, // 0 or negative to avoid auto-remove
-      placement: "top-right",
-      theme: "dark",
-      type: "success",
-      showProgress: true,
-      onClick: () => {
-        $importMode = true;
-        $exportMode = false;
-      },
-    });
+  // alerts
+  let showMultipleEntriesWarning = false;
+  let showSaveSuccess = false;
+
+  let saveBoth = false;
+  function handleBrowserSave() {
+    if (
+      !$localSaves.some(
+        (save, i) =>
+          save.data.title === $metaInfo.title &&
+          save.data.date === $metaInfo.date
+      ) ||
+      saveBoth
+    ) {
+      localSaves.update((prev) => [...prev, allDataAsObject]);
+      saveBoth = false;
+      showSaveSuccess = true;
+      setTimeout(() => {
+        showSaveSuccess = false;
+      }, 4000);
+    } else {
+      showMultipleEntriesWarning = true;
+    }
+  }
+
+  let overwriteVersion = 0;
+  function handleOverwrite() {
+    const tempLocalSaves = [...$localSaves];
+    tempLocalSaves[overwriteVersion - 1] = allDataAsObject;
+    $localSaves = tempLocalSaves;
+
+    showMultipleEntriesWarning = false;
+    saveBoth = false;
+    overwriteVersion = 0;
+    showSaveSuccess = true;
+    setTimeout(() => {
+      showSaveSuccess = false;
+    }, 4000);
   }
 </script>
 
 <div>
+  {#if showSaveSuccess}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <h4 class="alert-heading">Speichern erfolgreich</h4>
+      <p>
+        <!-- svelte-ignore a11y-missing-attribute -->
+        Schau zu
+        <button
+          class="btn btn-primary"
+          on:click={() => {
+            $importMode = true;
+            $exportMode = false;
+          }}>Import</button
+        > um alle gespeicherten Bögen zu sehen
+      </p>
+      <button
+        type="button"
+        class="btn-close"
+        on:click={() => {
+          $importMode = true;
+          $exportMode = false;
+        }}
+      />
+    </div>
+  {/if}
+  {#if showMultipleEntriesWarning}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <h4 class="alert-heading">
+        Es gibt bereits {multipleSaves.length > 1
+          ? `${multipleSaves.length} Speicherungen`
+          : "eine Speicherung"} mit dem selben Titel
+      </h4>
+      <div class="d-flex justify-content-start">
+        <div class="row g-0">
+          <select
+            id="versionSelect"
+            class="form-select col"
+            bind:value={overwriteVersion}
+          >
+            <option selected value={0}>Version...</option>
+            {#each multipleSaves as save, i}
+              <option value={i + 1}>{i + 1}</option>
+            {/each}
+          </select>
+          <button
+            id="overwriteButton"
+            type="button"
+            class="btn btn-warning col"
+            disabled={overwriteVersion == 0}
+            on:click={handleOverwrite}>Ersetzen</button
+          >
+        </div>
+
+        <button
+          class="btn btn-primary mx-2"
+          on:click={() => {
+            saveBoth = true;
+            showMultipleEntriesWarning = false;
+            handleBrowserSave();
+          }}>Zusätzlich speichern</button
+        >
+        <button
+          class="btn btn-secondary"
+          on:click={() => (showMultipleEntriesWarning = false)}
+          >Abbrechen</button
+        >
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        on:click={() => (showMultipleEntriesWarning = false)}
+      />
+    </div>
+  {/if}
   <div class="d-flex justify-content-start">
-    <button
-      class="btn btn-primary"
-      on:click={() => {
-        localSaves.update((prev) => [...prev, allDataAsObject]);
-        showSuccessToast();
-      }}
+    <button class="btn btn-primary" on:click={handleBrowserSave}
       >Im Browser speichern
     </button>
     <button class="btn btn-primary mx-2" on:click={() => exportFile()}
@@ -105,11 +200,18 @@
     um die Daten zu validieren.
   </p>
 </div>
-<ToastContainer placement="top-right" let:data>
-  <BootstrapToast {data} />
-</ToastContainer>
 
 <style>
+  #versionSelect {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  #overwriteButton {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
   #dataTextField {
     min-height: 400px;
   }
