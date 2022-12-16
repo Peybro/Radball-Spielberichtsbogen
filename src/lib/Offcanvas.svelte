@@ -69,7 +69,7 @@
       $importMode = false;
       $exportMode = true;
     }}
-    >Exportieren
+    >Speichern
   </button>
   <button class="btn btn-secondary w-100" on:click={() => window.print()}>
     Drucken
