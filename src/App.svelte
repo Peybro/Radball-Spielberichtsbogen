@@ -8,14 +8,16 @@
   import Team from "./model/Team";
 
   import {
+    mainMode,
     exportMode,
     importMode,
+    bigTableMode,
     menuMode,
-    teamEditMode,
   } from "./stores/booleanStore";
   import { matchList, metaInfo, teamList } from "./stores/contentStore";
   import Offcanvas from "./lib/Offcanvas.svelte";
   import Navigation from "./lib/Navigation.svelte";
+  import BigTable from "./lib/BigTable.svelte";
 
   onMount(async () => {
     $menuMode = window.innerWidth >= 1920;
@@ -92,12 +94,11 @@
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center">
       <div class="d-flex justify-content-start">
-        {#if $importMode || $exportMode}
+        {#if $importMode || $exportMode || $bigTableMode}
           <button
             class="btn ps-0"
             on:click={() => {
-              $importMode = false;
-              $exportMode = false;
+              $mainMode = true;
             }}
           >
             <h2>
@@ -106,11 +107,13 @@
           </button>
         {/if}
         <h1>
-          {!($importMode || $exportMode)
+          {$mainMode
             ? "Spielberichtsbogen"
             : $importMode
             ? "Daten importieren"
-            : "Daten exportieren"}
+            : $exportMode
+            ? "Daten exportieren"
+            : "Tabelle"}
         </h1>
       </div>
       <button class="btn pe-0" on:click={() => ($menuMode = !$menuMode)}>
@@ -120,12 +123,14 @@
       </button>
     </div>
 
-    {#if !($importMode || $exportMode)}
+    {#if $mainMode}
       <Accordion />
     {:else if $importMode}
       <ImportModal on:import={(e) => importData(e.detail.data)} />
     {:else if $exportMode}
       <ExportModal />
+    {:else if $bigTableMode}
+      <BigTable />
     {/if}
   </div>
 </main>
