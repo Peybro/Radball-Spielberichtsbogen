@@ -1,6 +1,7 @@
 <script lang="ts">
   import { fly } from "svelte/transition";
   import {
+    mainMode,
     exportMode,
     importMode,
     menuMode,
@@ -60,8 +61,7 @@
     class="btn btn-primary w-100 mb-2"
     on:click={() => {
       $menuMode = false;
-      $importMode = false;
-      $exportMode = false;
+      $mainMode = true;
     }}
     >Spielberichtsbogen
   </button>
@@ -71,7 +71,6 @@
     on:click={() => {
       $menuMode = false;
       $importMode = true;
-      $exportMode = false;
     }}
     >Importieren
   </button>
@@ -79,7 +78,6 @@
     class="btn btn-primary w-100 my-2"
     on:click={() => {
       $menuMode = false;
-      $importMode = false;
       $exportMode = true;
     }}
     >Speichern

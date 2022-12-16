@@ -6,7 +6,7 @@
     metaInfo,
     teamList,
   } from "../stores/contentStore";
-  import { importMode, exportMode } from "../stores/booleanStore";
+  import { importMode } from "../stores/booleanStore";
 
   //? Warum geht das wenn alle Felder privat sind; sind js Klassen einfach Objekte?
   //   $: allDataAsObject = {
@@ -93,21 +93,14 @@
       <p>
         <!-- svelte-ignore a11y-missing-attribute -->
         Schau zu
-        <button
-          class="btn btn-primary"
-          on:click={() => {
-            $importMode = true;
-            $exportMode = false;
-          }}>Import</button
+        <button class="btn btn-primary" on:click={() => ($importMode = true)}
+          >Import</button
         > um alle gespeicherten Bögen zu sehen
       </p>
       <button
         type="button"
         class="btn-close"
-        on:click={() => {
-          $importMode = true;
-          $exportMode = false;
-        }}
+        on:click={() => ($importMode = true)}
       />
     </div>
   {/if}

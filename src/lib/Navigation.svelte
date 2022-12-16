@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { createEventDispatcher } from "svelte";
   import { doc, getDoc, onSnapshot } from "firebase/firestore";
   import db from "../model/firebase";
-  import { matchToImport } from "../stores/contentStore";
+  import { matchToImport, bigTableLiga } from "../stores/contentStore";
+  import { bigTableMode } from "../stores/booleanStore";
 
   //   const unsub = onSnapshot(doc(db, "cities", "SF"), (doc) => {
   //     console.log("Current data: ", doc.data());
@@ -24,7 +24,6 @@
   });
 
   function handlePresaveSelect(index: number) {
-    // dispatch("loadPresave", matches[index]);
     $matchToImport = matches[index];
   }
 </script>
@@ -41,8 +40,17 @@
           {ligaName}
         </button>
         <ul class="dropdown-menu">
+          <li>
+            <button
+              class="dropdown-item text-wrap"
+              on:click={() => {
+                $bigTableLiga = ligaName;
+                $bigTableMode = true;
+              }}>Tabelle</button
+            >
+          </li>
           {#each matches as match, i}
-            {#if i > 0}<li><hr class="dropdown-divider" /></li>{/if}
+            <li><hr class="dropdown-divider" /></li>
             <li>
               <button
                 class="dropdown-item text-wrap"
