@@ -6,6 +6,7 @@
     menuMode,
     menuRight,
     resetMode,
+    teamEditMode,
   } from "../stores/booleanStore";
   import { matchList, metaInfo, teamList } from "../stores/contentStore";
   import {
@@ -15,12 +16,24 @@
   } from "../stores/initialValues";
 
   function resetData(): void {
-    //? WTF??
-    $metaInfo = { ...initialMetaInfo, title: "", location: "" };
+    //? Warum geht das nicht?
+    // $metaInfo = { ...initialMetaInfo };
+    $metaInfo = {
+      title: "",
+      location: "",
+      date: "",
+      startTime: "",
+      endTime: "",
+      chiefReferee: "",
+      referee: "",
+      duration: "2 x 7",
+      notPlaying: "",
+    };
     $teamList = [...initialTeamList];
     $matchList = [...initialMatchList];
 
     $resetMode = false;
+    $teamEditMode = true;
   }
 </script>
 

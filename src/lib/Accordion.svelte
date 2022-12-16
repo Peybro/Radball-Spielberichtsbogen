@@ -5,8 +5,6 @@
   import Table from "./Table.svelte";
 
   import { matchList, metaInfo, teamList } from "../stores/contentStore";
-
-  export let editMode: boolean;
 </script>
 
 <div class="accordion" id="main-accordion">
@@ -43,7 +41,7 @@
     <div class="accordion-collapse collapse" id="collapseTeams">
       <!-- {data-bs-parent="#main-accordion"} -->
       <div class="accordion-body">
-        <Teams bind:editMode />
+        <Teams />
       </div>
     </div>
   </div>
