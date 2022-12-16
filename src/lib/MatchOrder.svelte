@@ -69,8 +69,9 @@
 {#if editMode}
   <div><i class="bi bi-info-circle" /> Spiele per Drag and Drop anordnen.</div>
 {/if}
-<button class="btn btn-primary my-1" on:click={handleEditButton}
-  >{editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
+<button class="btn btn-secondary my-1" on:click={handleEditButton}
+  >{#if !editMode}<i class="bi bi-pencil-square" />{/if}
+  {editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
 >
 {#if editMode}
   <button
@@ -148,7 +149,7 @@
           </div>
 
           <div class="col-xs-12 col-sm-12 col-md-2">
-            <div class="input-group my-1">
+            <div class="input-group input-group-sm my-1">
               <span class="input-group-text d-block d-md-none">Halbzeit</span>
               <input
                 type="number"
@@ -168,7 +169,7 @@
           </div>
 
           <div class="col-xs-12 col-sm-12 col-md-2">
-            <div class="input-group my-1">
+            <div class="input-group input-group-sm my-1">
               <span class="input-group-text d-block d-md-none">Endstand</span>
               <input
                 type="number"
@@ -188,7 +189,7 @@
           </div>
 
           <div class="col-xs-12 col-sm-12 col-md-2 position-relative">
-            <div class="input-group my-1 ">
+            <div class="input-group input-group-sm my-1 ">
               <span class="input-group-text d-block d-md-none">Kommissär</span>
               <input
                 type="text"

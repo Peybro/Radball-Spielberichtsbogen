@@ -21,7 +21,8 @@
         Infos {$metaInfo.title !== "" ? `zu ${$metaInfo.title}` : ""}
       </button>
     </h2>
-    <div class="accordion-collapse collapse show" id="collapseInfo">
+    <!-- Klasse "show" für initiales Öffnen -->
+    <div class="accordion-collapse collapse" id="collapseInfo">
       <!-- {data-bs-parent="#main-accordion"} -->
       <div class="accordion-body">
         <Header />
@@ -31,7 +32,7 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
       <button
-        class="accordion-button"
+        class="accordion-button collapsed"
         data-bs-target="#collapseTeams"
         data-bs-toggle="collapse"
         type="button"
@@ -39,7 +40,7 @@
         Mannschaften {`(${$teamList.length})`}
       </button>
     </h2>
-    <div class="accordion-collapse collapse show" id="collapseTeams">
+    <div class="accordion-collapse collapse" id="collapseTeams">
       <!-- {data-bs-parent="#main-accordion"} -->
       <div class="accordion-body">
         <Teams bind:editMode />

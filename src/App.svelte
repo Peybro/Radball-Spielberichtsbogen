@@ -9,17 +9,13 @@
 
   import { exportMode, importMode, menuMode } from "./stores/booleanStore";
   import { matchList, metaInfo, teamList } from "./stores/contentStore";
-  import {
-    initialMatchList,
-    initialMetaInfo,
-    initialTeamList,
-  } from "./stores/initialValues";
   import Offcanvas from "./lib/Offcanvas.svelte";
 
   let editMode = true;
-  let resetMode = false;
 
   onMount(async () => {
+    $menuMode = window.innerWidth >= 1920;
+
     const url = new URL(window.location.href);
     if (url.searchParams.has("val")) {
       const jsonData = url.searchParams.get("val");
@@ -76,16 +72,6 @@
 
       $matchList = [...$matchList, newMatch];
     });
-  }
-
-  function resetData(): void {
-    //? WTF??
-    $metaInfo = { ...initialMetaInfo, title: "", location: "" };
-    $teamList = [...initialTeamList];
-    $matchList = [...initialMatchList];
-
-    editMode = true;
-    resetMode = false;
   }
 </script>
 
