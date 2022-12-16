@@ -125,56 +125,84 @@
     </div>
   {/if}
 
-  <div class="d-flex justify-content-between align-items-end">
-    <label for="localSavesList">Speicherungen in lokalem Speicher:</label>
-    <button
-      class="btn btn-secondary m-1"
-      on:click={() => (editSavesMode = !editSavesMode)}
-    >
-      {#if !editSavesMode}<i class="bi bi-pencil-square" />{/if}
-      {editSavesMode ? "Fertig bearbeitet" : "bearbeiten"}
-    </button>
-  </div>
-  <ul class="list-group mb-3" id="localSavesList">
-    {#each $localSaves as save, i}
-      <li
-        class="list-group-item d-flex justify-content-between align-items-start"
-        type="button"
-        on:click={() => (allData = JSON.stringify(save))}
-        on:keydown={() => (allData = JSON.stringify(save))}
-        draggable={$localSaves.length > 1 && editSavesMode}
-        class:dragging={isDragging && currentIndex === i}
-        on:touchstart={(e) => handleDragStart(e, i)}
-        on:touchmove={(e) => handleDragMove(e, i)}
-        on:touchend={handleDragEnd}
-        on:dragstart={(e) => handleDragStart(e, i)}
-        on:dragover={(e) => handleDragMove(e, i)}
-        on:dragend={handleDragEnd}
+  <div class="accordion mb-2" id="localSavesAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseOne"
+          aria-expanded="true"
+          aria-controls="collapseOne"
+        >
+          Speicherungen in lokalem Speicher
+        </button>
+      </h2>
+      <div
+        id="collapseOne"
+        class="accordion-collapse collapse show"
+        aria-labelledby="headingOne"
+        data-bs-parent="#localSavesAccordion"
       >
-        <div class="ms-2 me-auto">
-          <div class="fw-bold">
-            {save.data.title === ""
-              ? "[Kein Titel angegeben]"
-              : save.data.title}
-          </div>
-          {save.data.date === "" ? "[Kein Datum angegeben]" : save.data.date}
-        </div>
-        {#if editSavesMode}
+        <div class="accordion-body">
           <button
-            class="btn btn-danger"
-            on:click={() =>
-              ($localSaves = [...$localSaves].filter((item, j) => j !== i))}
+            class="btn btn-secondary mb-1"
+            on:click={() => (editSavesMode = !editSavesMode)}
           >
-            <i class="bi bi-trash" />
+            {#if !editSavesMode}<i class="bi bi-pencil-square" />{/if}
+            {editSavesMode ? "Fertig bearbeitet" : "bearbeiten"}
           </button>
-        {/if}
-      </li>
-    {:else}
-      <p>- Keine lokalen Speicherstände -</p>
-    {/each}
-  </ul>
-
-  <hr />
+          <hr />
+          <ul class="list-group mb-3" id="localSavesList">
+            {#each $localSaves as save, i}
+              <li
+                class="list-group-item d-flex justify-content-between align-items-start align-items-center"
+                type="button"
+                on:click={() => (allData = JSON.stringify(save))}
+                on:keydown={() => (allData = JSON.stringify(save))}
+                draggable={editSavesMode && $localSaves.length > 1}
+                class:dragging={isDragging && currentIndex === i}
+                on:touchstart={(e) => handleDragStart(e, i)}
+                on:touchmove={(e) => handleDragMove(e, i)}
+                on:touchend={handleDragEnd}
+                on:dragstart={(e) => handleDragStart(e, i)}
+                on:dragover={(e) => handleDragMove(e, i)}
+                on:dragend={handleDragEnd}
+              >
+                {#if editSavesMode && $localSaves.length > 1}
+                  <i class="bi bi-grip-vertical" />
+                {/if}
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">
+                    {save.data.title === ""
+                      ? "[Kein Titel angegeben]"
+                      : save.data.title}
+                  </div>
+                  {save.data.date === ""
+                    ? "[Kein Datum angegeben]"
+                    : save.data.date}
+                </div>
+                {#if editSavesMode}
+                  <button
+                    class="btn btn-danger"
+                    on:click={() =>
+                      ($localSaves = [...$localSaves].filter(
+                        (item, j) => j !== i
+                      ))}
+                  >
+                    <i class="bi bi-trash" />
+                  </button>
+                {/if}
+              </li>
+            {:else}
+              <p>- Keine lokalen Speicherstände -</p>
+            {/each}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="d-flex justify-content-between">
     <button class="btn btn-primary" on:click={() => importFile()}
