@@ -3,6 +3,7 @@
   import Match from "../model/Match";
 
   import { matchList, teamList } from "../stores/contentStore";
+  import { teamEditMode } from "../stores/booleanStore";
 
   function createMatches(): void {
     $matchList = combinations($teamList);
@@ -28,12 +29,10 @@
     //! so wahrscheinlich besser - muss man halt die Spiele manuell entfernen
     // createMatches();
   }
-
-  export let editMode: boolean;
 </script>
 
 {#each $teamList as team, i}
-  <div class={!editMode ? "disabled" : ""}>
+  <div class={!$teamEditMode ? "disabled" : ""}>
     <div class="input-group mb-3">
       <input
         type="text"
@@ -124,7 +123,7 @@
 {:else}
   <p>Noch keine Teams - füge welche hinzu.</p>
 {/each}
-{#if editMode}
+{#if $teamEditMode}
   <button
     class={`btn btn-${
       $matchList.some(
@@ -150,11 +149,11 @@
   </button>
 {/if}
 <button
-  class={`btn btn-${editMode ? "primary" : "warning"} mb-3 w-100`}
+  class={`btn btn-${$teamEditMode ? "primary" : "warning"} mb-3 w-100`}
   disabled={$teamList.length === 0 ||
     $teamList.some((team) => team.Name === "")}
-  on:click={() => (editMode = !editMode)}
-  >{editMode ? "Fertig" : "Bearbeiten"}</button
+  on:click={() => ($teamEditMode = !$teamEditMode)}
+  >{$teamEditMode ? "Fertig" : "Bearbeiten"}</button
 >
 
 <style>

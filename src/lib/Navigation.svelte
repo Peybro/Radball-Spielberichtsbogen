@@ -9,8 +9,6 @@
   //     console.log("Current data: ", doc.data());
   //   });
 
-  const dispatch = createEventDispatcher();
-
   const ligaName = "Oberfrankenliga";
   const docRef = doc(db, "spielbogen", ligaName.toLowerCase());
   let matches = [];

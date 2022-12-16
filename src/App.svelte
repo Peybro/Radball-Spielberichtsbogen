@@ -7,12 +7,15 @@
   import { onMount } from "svelte";
   import Team from "./model/Team";
 
-  import { exportMode, importMode, menuMode } from "./stores/booleanStore";
+  import {
+    exportMode,
+    importMode,
+    menuMode,
+    teamEditMode,
+  } from "./stores/booleanStore";
   import { matchList, metaInfo, teamList } from "./stores/contentStore";
   import Offcanvas from "./lib/Offcanvas.svelte";
   import Navigation from "./lib/Navigation.svelte";
-
-  let editMode = true;
 
   onMount(async () => {
     $menuMode = window.innerWidth >= 1920;
@@ -31,7 +34,7 @@
   });
 
   function importData(jsonString: string): void {
-    editMode = false;
+    $teamEditMode = false;
 
     const fileContent = JSON.parse(jsonString);
 
@@ -120,7 +123,7 @@
     </div>
 
     {#if !($importMode || $exportMode)}
-      <Accordion bind:editMode />
+      <Accordion />
     {:else if $importMode}
       <ImportModal on:import={(e) => importData(e.detail.data)} />
     {:else if $exportMode}
