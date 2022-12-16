@@ -14,7 +14,12 @@
     bigTableMode,
     menuMode,
   } from "./stores/booleanStore";
-  import { matchList, metaInfo, teamList } from "./stores/contentStore";
+  import {
+    matchList,
+    metaInfo,
+    teamList,
+    bigTableLiga,
+  } from "./stores/contentStore";
   import Offcanvas from "./lib/Offcanvas.svelte";
   import Navigation from "./lib/Navigation.svelte";
   import BigTable from "./lib/BigTable.svelte";
@@ -23,11 +28,17 @@
     $menuMode = window.innerWidth >= 1920;
 
     const url = new URL(window.location.href);
+    if (url.searchParams.has("liga")) {
+      const liga = url.searchParams.get("liga");
+      $bigTableLiga = liga;
+      $bigTableMode = true;
+    }
     if (url.searchParams.has("val")) {
       const jsonData = url.searchParams.get("val");
       try {
         importData(jsonData);
       } catch (err) {
+        // TODO: Banner
         console.error(err);
       }
     } else {
