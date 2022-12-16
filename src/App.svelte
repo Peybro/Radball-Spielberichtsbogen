@@ -34,8 +34,6 @@
   });
 
   function importData(jsonString: string): void {
-    $teamEditMode = false;
-
     const fileContent = JSON.parse(jsonString);
 
     metaInfo.set(fileContent.data);
