@@ -10,6 +10,7 @@ export const teamList = writable(initialTeamList);
 export const matchList = writable(initialMatchList);
 
 export const matchToImport = writable("");
+export const bigTableLiga = writable("");
 
 export const localSaves = writable(
   JSON.parse(localStorage.getItem("allData")) || []
