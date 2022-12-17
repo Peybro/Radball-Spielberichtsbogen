@@ -106,10 +106,10 @@
     </div>
   {/if}
   <div id="signature">
-    <div>
+    <!-- <div>
       <i class="bi bi-chat-right-heart" />
       <span class="ms-1">Made by Thomas K.</span>
-    </div>
+    </div> -->
     <div class="d-flex justify-content-start">
       <a href="https://github.com/Peybro/spielberichtsbogen"
         ><i class="bi bi-github" /></a
