@@ -59,8 +59,16 @@
 
 <button class="btn btn-primary" on:click={copyToClipboard}
   >{#if copySuccess}
-    Link in Zwischenablage kopiert <i class="bi bi-clipboard-check" />
+    <!-- large screen -->
+    <span class="d-none d-md-block"
+      >Link in Zwischenablage kopiert <i class="bi bi-clipboard-check" /></span
+    >
+    <!-- small screen -->
+    <span class="d-md-none"><i class="bi bi-clipboard-check" /></span>
   {:else}
-    Link teilen <i class="bi bi-share" />
+    <!-- large screen -->
+    <span class="d-none d-md-block">Link teilen <i class="bi bi-share" /></span>
+    <!-- small screen -->
+    <span class="d-md-none"><i class="bi bi-share" /></span>
   {/if}
 </button>
