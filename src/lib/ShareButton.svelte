@@ -16,7 +16,7 @@
   async function copyToClipboard() {
     const vercel = "https://radball-spielberichtsbogen.vercel.app";
     const longUrl = `${
-      import.meta.env.DEV ? vercel : window.location.host
+      import.meta.env.DEV ? vercel : window.location.origin
     }/?val=${JSON.stringify(allDataAsObject)}`;
 
     await fetch(
