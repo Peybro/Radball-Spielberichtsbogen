@@ -38,7 +38,6 @@
     "bootstrap-icons": "^1.10.2",
     "firebase": "^9.15.0",
     "hash.js": "^1.1.7",
-    "shortlnk": "^1.1.2",
     "uuid": "^9.0.0"
   }
 }

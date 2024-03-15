@@ -7,7 +7,6 @@
     teamList,
   } from "../stores/contentStore";
   import { importMode } from "../stores/booleanStore";
-  import { createShortUrl, decodeURL } from "shortlnk";
 
   $: allDataAsObject = {
     data: { ...$metaInfo },
@@ -43,6 +42,7 @@
   // alerts
   let showMultipleEntriesWarning = false;
   let showSaveSuccess = false;
+  let showClipboardSuccess = false;
 
   let saveBoth = false;
   function handleBrowserSave() {
@@ -75,22 +75,38 @@
     saveBoth = false;
     overwriteVersion = 0;
     showSaveSuccess = true;
-    setTimeout(() => {
-      showSaveSuccess = false;
-    }, 4000);
   }
 
   async function copyToClipboard() {
-    const vercel = "https://radball-spielberichtsbogen.vercel.app"
-    const longUrl = `${vercel}/?val=${JSON.stringify(allDataAsObject)}`;
-    console.log("Long URL:", longUrl);
-    
-    const createResponse = await createShortUrl(longUrl);
-    if (createResponse.success) {
-      console.log("Short URL:", createResponse.data);
-    } else {
-      console.error("Error creating short URL:", createResponse.error);
-    }
+    const vercel = "https://radball-spielberichtsbogen.vercel.app";
+    const longUrl = `${import.meta.env.DEV ? vercel : location.host}/?val=${JSON.stringify(allDataAsObject)}`;
+
+    await fetch(
+      `https://api.tinyurl.com/create?api_token=${import.meta.env.VITE_TINYURL_APIKEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: longUrl,
+          domain: "tinyurl.com",
+          // alias: `${allDataAsObject.data.metaInfo.location.split(",")[0]}`,
+          // tags: "example,link",
+          // expires_at: "2024-10-25 10:11:12",
+          // description: "string",
+        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        navigator.clipboard.writeText(data.data.tiny_url);
+
+        showClipboardSuccess = true;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 </script>
 
@@ -108,10 +124,23 @@
       <button
         type="button"
         class="btn-close"
-        on:click={() => ($importMode = true)}
+        on:click={() => (showSaveSuccess = false)}
       />
     </div>
   {/if}
+
+  {#if showClipboardSuccess}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <h4 class="alert-heading">Link kopiert</h4>
+      <p>Link wurde in die Zwischenablage kopiert</p>
+      <button
+        type="button"
+        class="btn-close"
+        on:click={() => (showClipboardSuccess = false)}
+      />
+    </div>
+  {/if}
+
   {#if showMultipleEntriesWarning}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
       <h4 class="alert-heading">
