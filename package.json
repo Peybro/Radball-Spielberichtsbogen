@@ -16,6 +16,7 @@
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "@tsconfig/svelte": "^3.0.0",
     "@types/bootstrap": "^5.2.6",
+    "@types/node": "^20.11.28",
     "@types/uuid": "^9.0.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
@@ -37,6 +38,7 @@
     "bootstrap-icons": "^1.10.2",
     "firebase": "^9.15.0",
     "hash.js": "^1.1.7",
+    "shortlnk": "^1.1.2",
     "uuid": "^9.0.0"
   }
 }

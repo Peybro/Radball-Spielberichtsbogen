@@ -126,7 +126,7 @@
   {/if}
 
   <div class="accordion mb-2" id="localSavesAccordion">
-    <div class="accordion-item">
+    <!-- <div class="accordion-item">
       <h2 class="accordion-header">
         <button
           class="accordion-button collapsed"
@@ -146,7 +146,7 @@
           <Navigation />
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -247,21 +247,19 @@
     class="form-control my-3"
     id="dataTextField"
     on:input={() => (hashValid = undefined)}
-    type="text"
   />
 
   <label class="form-label" for="">Hash aus Export:</label>
   <textarea
     bind:value={userHash}
     class="form-control"
-    on:input={() => (hashValid = undefined)}
-    type="text"
+    on:input={validateHash}
   />
 
   <div class="d-flex justify-content-between align-items-center">
-    <button class="btn btn-primary mt-2" on:click={validateHash}
+    <!-- <button class="btn btn-primary mt-2" on:click={validateHash}
       >Validieren
-    </button>
+    </button> -->
     {#if hashValid !== undefined}
       {#if hashValid}
         <span class="text-success">Die Daten sind valide.</span>

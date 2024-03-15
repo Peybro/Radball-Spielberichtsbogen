@@ -189,7 +189,7 @@
           </div>
 
           <div class="col-xs-12 col-sm-12 col-md-2 position-relative">
-            <div class="input-group input-group-sm my-1 ">
+            <div class="input-group input-group-sm my-1">
               <span class="input-group-text d-block d-md-none">Kommissär</span>
               <input
                 type="text"
