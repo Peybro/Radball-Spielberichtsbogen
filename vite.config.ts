@@ -22,7 +22,7 @@ export default defineConfig({
       manifest: {
         short_name: "Spielbogen",
         name: "Spielberichtsbogen",
-        start_url: "/spiel/",
+        start_url: "/",
         icons: [
           {
             src: "./android-chrome-192x192.png",
@@ -40,7 +40,7 @@ export default defineConfig({
         theme_color: "#111111",
         background_color: "#3367D6",
         display: "standalone",
-        scope: "/spiel/",
+        scope: "/",
         description: "Manager für Radball Spieltage",
       },
     }),

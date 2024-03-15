@@ -7,13 +7,8 @@
     teamList,
   } from "../stores/contentStore";
   import { importMode } from "../stores/booleanStore";
+  import { createShortUrl, decodeURL } from "shortlnk";
 
-  //? Warum geht das wenn alle Felder privat sind; sind js Klassen einfach Objekte?
-  //   $: allDataAsObject = {
-  //     data: $metaInfo,
-  //     teams: $teamList,
-  //     matches: $matchList,
-  //   };
   $: allDataAsObject = {
     data: { ...$metaInfo },
     teams: [...$teamList].map((team) => team.toObject()),
@@ -83,6 +78,19 @@
     setTimeout(() => {
       showSaveSuccess = false;
     }, 4000);
+  }
+
+  async function copyToClipboard() {
+    const vercel = "https://radball-spielberichtsbogen.vercel.app"
+    const longUrl = `${vercel}/?val=${JSON.stringify(allDataAsObject)}`;
+    console.log("Long URL:", longUrl);
+    
+    const createResponse = await createShortUrl(longUrl);
+    if (createResponse.success) {
+      console.log("Short URL:", createResponse.data);
+    } else {
+      console.error("Error creating short URL:", createResponse.error);
+    }
   }
 </script>
 
@@ -162,11 +170,15 @@
     </button>
 
     <button
-      class="btn btn-primary"
+      class="btn btn-primary me-2"
       on:click={() =>
         (window.location.href = `?val=${JSON.stringify(allDataAsObject)}`)}
       >In URL speichern
     </button>
+
+    <button class="btn btn-primary" on:click={copyToClipboard}
+      ><i class="bi bi-share"></i></button
+    >
   </div>
   <p class="my-2">
     <i class="bi bi-info-circle" /> Seite kann bei URL Export sicher verlassen werden
@@ -176,18 +188,11 @@
     class="form-control my-3"
     disabled
     id="dataTextField"
-    type="text"
     value={JSON.stringify(allDataAsObject)}
   />
 
   <label class="form-label" for="hashTextarea">Hash:</label>
-  <textarea
-    bind:value={hash}
-    class="form-control"
-    disabled
-    id="hashTextarea"
-    type="text"
-  />
+  <textarea bind:value={hash} class="form-control" disabled id="hashTextarea" />
   <p class="my-2">
     <i class="bi bi-info-circle" /> Der Hash kann beim Importieren genutzt werden
     um die Daten zu validieren.
