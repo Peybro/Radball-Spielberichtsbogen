@@ -58,7 +58,7 @@
 </script>
 
 <button class="btn btn-primary" on:click={copyToClipboard}
-  >{#if $showClipboardSuccess}
+  >{#if copySuccess}
     Link in Zwischenablage kopiert <i class="bi bi-clipboard-check" />
   {:else}
     Link teilen <i class="bi bi-share" />
