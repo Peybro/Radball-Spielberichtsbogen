@@ -7,6 +7,8 @@
     teamList,
   } from "../stores/contentStore";
 
+  let copySuccess = false;
+
   $: allDataAsObject = {
     data: { ...$metaInfo },
     teams: [...$teamList].map((team) => team.toObject()),
@@ -44,6 +46,10 @@
         $shortLink = data.data.tiny_url;
 
         $showClipboardSuccess = true;
+        copySuccess = true;
+        setTimeout(() => {
+          copySuccess = false;
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -52,5 +58,9 @@
 </script>
 
 <button class="btn btn-primary" on:click={copyToClipboard}
-  >Link teilen <i class="bi bi-share" /></button
->
+  >{#if $showClipboardSuccess}
+    Link in Zwischenablage kopiert <i class="bi bi-clipboard-check" />
+  {:else}
+    Link teilen <i class="bi bi-share" />
+  {/if}
+</button>
