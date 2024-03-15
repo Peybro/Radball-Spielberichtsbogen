@@ -10,6 +10,8 @@ export const importMode = writable(false);
 export const exportMode = writable(false);
 export const bigTableMode = writable(false);
 
+export const showClipboardSuccess = writable(false);
+
 mainMode.subscribe((val) => {
   if (val) {
     importMode.set(false);

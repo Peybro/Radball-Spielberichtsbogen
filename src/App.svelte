@@ -23,6 +23,7 @@
   import Offcanvas from "./lib/Offcanvas.svelte";
   import Navigation from "./lib/Navigation.svelte";
   import BigTable from "./lib/BigTable.svelte";
+  import ShareButton from "./lib/ShareButton.svelte";
 
   onMount(async () => {
     $menuMode = window.innerWidth >= 1920;
@@ -127,11 +128,16 @@
             : "Tabelle"}
         </h1>
       </div>
-      <button class="btn pe-0" on:click={() => ($menuMode = !$menuMode)}>
-        <h1>
-          <i class="bi bi-list" />
-        </h1>
-      </button>
+
+      <div>
+        <ShareButton />
+
+        <button class="btn pe-0" on:click={() => ($menuMode = !$menuMode)}>
+          <h1>
+            <i class="bi bi-list" />
+          </h1>
+        </button>
+      </div>
     </div>
 
     {#if $mainMode}

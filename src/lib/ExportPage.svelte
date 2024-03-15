@@ -4,9 +4,12 @@
     localSaves,
     matchList,
     metaInfo,
+    shortLink,
     teamList,
   } from "../stores/contentStore";
   import { importMode } from "../stores/booleanStore";
+  import { showClipboardSuccess } from "../stores/booleanStore";
+  import ShareButton from "./ShareButton.svelte";
 
   $: allDataAsObject = {
     data: { ...$metaInfo },
@@ -42,7 +45,6 @@
   // alerts
   let showMultipleEntriesWarning = false;
   let showSaveSuccess = false;
-  let showClipboardSuccess = false;
 
   let saveBoth = false;
   function handleBrowserSave() {
@@ -76,38 +78,6 @@
     overwriteVersion = 0;
     showSaveSuccess = true;
   }
-
-  async function copyToClipboard() {
-    const vercel = "https://radball-spielberichtsbogen.vercel.app";
-    const longUrl = `${import.meta.env.DEV ? vercel : window.location.host}/?val=${JSON.stringify(allDataAsObject)}`;
-
-    await fetch(
-      `https://api.tinyurl.com/create?api_token=${import.meta.env.VITE_TINYURL_APIKEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url: longUrl,
-          domain: "tinyurl.com",
-          // alias: `${allDataAsObject.data.metaInfo.location.split(",")[0]}`,
-          // tags: "example,link",
-          // expires_at: "2024-10-25 10:11:12",
-          // description: "string",
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        navigator.clipboard.writeText(data.data.tiny_url);
-
-        showClipboardSuccess = true;
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
 </script>
 
 <div>
@@ -129,14 +99,22 @@
     </div>
   {/if}
 
-  {#if showClipboardSuccess}
+  {#if $showClipboardSuccess}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       <h4 class="alert-heading">Link kopiert</h4>
       <p>Link wurde in die Zwischenablage kopiert</p>
+      {#if $shortLink !== ""}
+        <a
+          href={$shortLink}
+          class="text-light"
+          target="_blank"
+          rel="noopener noreferrer">{$shortLink}</a
+        >
+      {/if}
       <button
         type="button"
         class="btn-close"
-        on:click={() => (showClipboardSuccess = false)}
+        on:click={() => ($showClipboardSuccess = false)}
       />
     </div>
   {/if}
@@ -198,16 +176,14 @@
       >Als Datei speichern
     </button>
 
-    <button
+    <!-- <button
       class="btn btn-primary me-2"
       on:click={() =>
         (window.location.href = `?val=${JSON.stringify(allDataAsObject)}`)}
       >In URL speichern
-    </button>
+    </button> -->
 
-    <button class="btn btn-primary" on:click={copyToClipboard}
-      ><i class="bi bi-share"></i></button
-    >
+    <ShareButton />
   </div>
   <p class="my-2">
     <i class="bi bi-info-circle" /> Seite kann bei URL Export sicher verlassen werden

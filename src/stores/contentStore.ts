@@ -12,6 +12,8 @@ export const matchList = writable(initialMatchList);
 export const matchToImport = writable("");
 export const bigTableLiga = writable("");
 
+export const shortLink = writable("");
+
 export const localSaves = writable(
   JSON.parse(localStorage.getItem("allData")) || []
 );
