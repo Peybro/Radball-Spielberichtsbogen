@@ -35,6 +35,9 @@
 
     $resetMode = false;
     $teamEditMode = true;
+    $menuMode = false;
+
+    window.history.pushState({}, "", "/");
   }
 </script>
 

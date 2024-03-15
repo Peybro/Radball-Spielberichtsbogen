@@ -79,7 +79,7 @@
 
   async function copyToClipboard() {
     const vercel = "https://radball-spielberichtsbogen.vercel.app";
-    const longUrl = `${import.meta.env.DEV ? vercel : location.host}/?val=${JSON.stringify(allDataAsObject)}`;
+    const longUrl = `${import.meta.env.DEV ? vercel : window.location.host}/?val=${JSON.stringify(allDataAsObject)}`;
 
     await fetch(
       `https://api.tinyurl.com/create?api_token=${import.meta.env.VITE_TINYURL_APIKEY}`,
