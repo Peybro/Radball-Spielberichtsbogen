@@ -13,6 +13,7 @@
     importMode,
     bigTableMode,
     menuMode,
+    teamEditMode,
   } from "./stores/booleanStore";
   import {
     matchList,
@@ -38,6 +39,7 @@
       const jsonData = url.searchParams.get("val");
       try {
         importData(jsonData);
+        $teamEditMode = false;
       } catch (err) {
         // TODO: Banner
         console.error(err);
@@ -122,10 +124,10 @@
           {$mainMode
             ? "Spielberichtsbogen"
             : $importMode
-            ? "Daten importieren"
-            : $exportMode
-            ? "Daten exportieren"
-            : "Tabelle"}
+              ? "Daten importieren"
+              : $exportMode
+                ? "Daten exportieren"
+                : "Tabelle"}
         </h1>
       </div>
 
