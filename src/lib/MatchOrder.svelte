@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Match from "../model/Match";
   import { matchList, teamList } from "../stores/contentStore";
 
   function removeMatch(matchId: string): void {
@@ -9,54 +10,6 @@
     return $teamList.find((team: any) => team.Id === teamId).Name;
   }
 
-  let isDragging = false;
-  let startIndex: number;
-  let currentIndex: number;
-
-  function handleDragStart(event: any, index: number): void {
-    if (!editMode) return;
-
-    isDragging = true;
-    startIndex = index;
-    currentIndex = index;
-
-    event.dataTransfer.setData("text/plain", index.toString());
-  }
-
-  function handleDragMove(event: any, index: number): void {
-    if (!editMode) return;
-    if (!isDragging) return;
-
-    currentIndex = index;
-
-    event.preventDefault();
-  }
-
-  function handleDragEnd(): void {
-    if (!isDragging) return;
-
-    isDragging = false;
-
-    // swap
-    // const temp = list[startIndex];
-    // list[startIndex] = list[currentIndex];
-    // list[currentIndex] = temp;
-
-    // insert at index
-    if (startIndex !== currentIndex) {
-      let draggedItem = $matchList[startIndex];
-      $matchList = [
-        ...$matchList.slice(0, startIndex),
-        ...$matchList.slice(startIndex + 1),
-      ];
-      $matchList = [
-        ...$matchList.slice(0, currentIndex),
-        draggedItem,
-        ...$matchList.slice(currentIndex),
-      ];
-    }
-  }
-
   let deleteMode = false;
   let editMode = false;
 
@@ -64,11 +17,33 @@
     if (editMode) deleteMode = false;
     editMode = !editMode;
   }
+
+  let duplicateMatches: string[] = [];
+
+  $: {
+    const matchMap = new Map();
+    const result = new Set<string>();
+
+    for (const match of $matchList) {
+      const matchKey = [match.Team1Id, match.Team2Id].sort().join("-");
+
+      if (matchMap.has(matchKey)) {
+        matchMap.get(matchKey).push(match.Id);
+      } else {
+        matchMap.set(matchKey, [match.Id]);
+      }
+    }
+
+    for (const ids of matchMap.values()) {
+      if (ids.length > 1) {
+        ids.forEach((id: string) => result.add(id));
+      }
+    }
+
+    duplicateMatches = Array.from(result);
+  }
 </script>
 
-{#if editMode}
-  <div><i class="bi bi-info-circle" /> Spiele per Drag and Drop anordnen.</div>
-{/if}
 <button class="btn btn-secondary my-1" on:click={handleEditButton}
   >{#if !editMode}<i class="bi bi-pencil-square" />{/if}
   {editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
@@ -99,32 +74,36 @@
   {#each $matchList as match, index (`match-${index}`)}
     <li
       class="list-group-item pt-2"
-      draggable={editMode}
-      class:dragging={isDragging && currentIndex === index}
-      on:touchstart={(e) => handleDragStart(e, index)}
-      on:touchmove={(e) => handleDragMove(e, index)}
-      on:touchend={handleDragEnd}
-      on:dragstart={(e) => handleDragStart(e, index)}
-      on:dragover={(e) => handleDragMove(e, index)}
-      on:dragend={handleDragEnd}
+      class:bg-danger={match.Team1Id === match.Team2Id}
+      class:bg-warning={editMode && duplicateMatches.includes(match.Id)}
     >
       <div class="row">
-        {#if editMode}
-          <div class="col-1 pgRow">
-            <i
-              class="bi bi-grip-vertical"
-              style={`cursor: ${isDragging ? "grabbing" : "grab"};`}
-            />
-          </div>
-        {/if}
         <div class="col row">
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="row row-cols-12">
               <div class="col-1">{index + 1}.</div>
               <div class="col">
-                {getTeamNameById(match.Team1Id) === ""
-                  ? "[Bitte Teamname eingeben]"
-                  : getTeamNameById(match.Team1Id)}
+                {#if !editMode}
+                  {getTeamNameById(match.Team1Id) === ""
+                    ? "[Bitte Teamname eingeben]"
+                    : getTeamNameById(match.Team1Id)}
+                {:else}
+                  <select
+                    on:change={(e) =>
+                      (match.Team1Id = $teamList.find(
+                        (team) => team.Name === e.currentTarget.value
+                      ).Id)}
+                  >
+                    {#each $teamList as team}
+                      <option
+                        selected={getTeamNameById(match.Team1Id) === team.Name}
+                        >{team.Name !== ""
+                          ? team.Name
+                          : "Bitte Teamname eingeben"}</option
+                      >
+                    {/each}
+                  </select>
+                {/if}
               </div>
               <div class="col">
                 {#if editMode}
@@ -141,9 +120,27 @@
                 {:else}
                   <span>-</span>
                 {/if}
-                {getTeamNameById(match.Team2Id) === ""
-                  ? "[Bitte Teamname eingeben]"
-                  : getTeamNameById(match.Team2Id)}
+                {#if !editMode}
+                  {getTeamNameById(match.Team2Id) === ""
+                    ? "[Bitte Teamname eingeben]"
+                    : getTeamNameById(match.Team2Id)}
+                {:else}
+                  <select
+                    on:change={(e) =>
+                      (match.Team2Id = $teamList.find(
+                        (team) => team.Name === e.currentTarget.value
+                      ).Id)}
+                  >
+                    {#each $teamList as team}
+                      <option
+                        selected={getTeamNameById(match.Team2Id) === team.Name}
+                        >{team.Name !== ""
+                          ? team.Name
+                          : "Bitte Teamname eingeben"}</option
+                      >
+                    {/each}
+                  </select>
+                {/if}
               </div>
             </div>
           </div>
@@ -218,11 +215,6 @@
 </div>
 
 <style>
-  li.dragging {
-    opacity: 0.8;
-    background-color: #0b5dd5;
-  }
-
   .pgRow {
     display: flex;
     align-items: center;
