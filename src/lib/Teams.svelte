@@ -26,10 +26,6 @@
   function removeTeam(index: number): void {
     $teamList = $teamList.filter((team, i) => i !== index);
   }
-
-  $: {
-    console.table($teamList);
-  }
 </script>
 
 {#each $teamList as team, i}
