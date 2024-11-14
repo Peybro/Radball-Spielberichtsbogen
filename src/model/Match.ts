@@ -10,8 +10,8 @@ export default class Match {
   private finalScoreTeam2: number;
 
   constructor(
-    private team1Id: string,
-    private team2Id: string,
+    private team1Id?: string,
+    private team2Id?: string,
     private referee?: string
   ) {
     this.id = uuidv4();

@@ -21,13 +21,14 @@
 
   function addNewTeam(): void {
     $teamList = [...$teamList, new Team()];
-    createMatches();
   }
 
   function removeTeam(index: number): void {
     $teamList = $teamList.filter((team, i) => i !== index);
-    //! so wahrscheinlich besser - muss man halt die Spiele manuell entfernen
-    // createMatches();
+  }
+
+  $: {
+    console.table($teamList);
   }
 </script>
 
@@ -39,7 +40,6 @@
         class="form-control"
         placeholder={`Mannschaft ${i + 1}`}
         bind:value={team.Name}
-        on:input={createMatches}
       />
       <span
         class="input-group-text"
@@ -148,13 +148,25 @@
       : ""}
   </button>
 {/if}
-<button
-  class={`btn btn-${$teamEditMode ? "primary" : "warning"} mb-3 w-100`}
-  disabled={$teamList.length === 0 ||
-    $teamList.some((team) => team.Name === "")}
-  on:click={() => ($teamEditMode = !$teamEditMode)}
-  >{$teamEditMode ? "Fertig" : "Bearbeiten"}</button
->
+{#if $teamEditMode}
+  <button
+    class="btn btn-primary mb-3 w-100"
+    disabled={$teamList.length === 0 ||
+      $teamList.some((team) => team.Name === "")}
+    on:click={() => ($teamEditMode = false)}
+  >
+    Fertig
+  </button>
+{:else}
+  <button
+    class="btn btn-warning mb-3 w-100"
+    disabled={$teamList.length === 0 ||
+      $teamList.some((team) => team.Name === "")}
+    on:click={() => ($teamEditMode = true)}
+  >
+    <i class="bi bi-pencil-square" /> Bearbeiten
+  </button>
+{/if}
 
 <style>
   .disabled {

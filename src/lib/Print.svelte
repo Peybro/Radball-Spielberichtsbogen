@@ -9,6 +9,7 @@
   }
 
   function getTeamNameById(id: string) {
+    if (!id) return "";
     return $teamList.find((team) => team.Id === id).Name;
   }
 </script>

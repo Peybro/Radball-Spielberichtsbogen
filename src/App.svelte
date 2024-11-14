@@ -124,10 +124,10 @@
           {$mainMode
             ? "Spielberichtsbogen"
             : $importMode
-              ? "Daten importieren"
-              : $exportMode
-                ? "Daten exportieren"
-                : "Tabelle"}
+            ? "Daten importieren"
+            : $exportMode
+            ? "Daten exportieren"
+            : "Tabelle"}
         </h1>
       </div>
 

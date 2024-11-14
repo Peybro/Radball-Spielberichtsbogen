@@ -1,5 +1,6 @@
 <script lang="ts">
   import Match from "../model/Match";
+  import Team from "../model/Team";
   import { matchList, teamList } from "../stores/contentStore";
 
   function removeMatch(matchId: string): void {
@@ -7,7 +8,8 @@
   }
 
   function getTeamNameById(teamId: string) {
-    return $teamList.find((team: any) => team.Id === teamId).Name;
+    if (!teamId) return "";
+    return $teamList.find((team: Team) => team.Id === teamId).Name;
   }
 
   let deleteMode = false;
@@ -44,19 +46,21 @@
   }
 </script>
 
-<button class="btn btn-secondary my-1" on:click={handleEditButton}
-  >{#if !editMode}<i class="bi bi-pencil-square" />{/if}
-  {editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
->
-{#if editMode}
-  <button
-    class={`btn btn-outline-${deleteMode ? "primary" : "danger"} my-1`}
-    on:click={() => (deleteMode = !deleteMode)}
-    >{deleteMode ? "Entfernen beenden" : "einzelne Spiele entfernen"}</button
+{#if $matchList.length > 0}
+  <button class="btn btn-secondary my-1" on:click={handleEditButton}
+    >{#if !editMode}<i class="bi bi-pencil-square" />{/if}
+    {editMode ? "Fertig bearbeitet" : "bearbeiten"}</button
   >
-{/if}
+  {#if editMode}
+    <button
+      class={`btn btn-outline-${deleteMode ? "primary" : "danger"} my-1`}
+      on:click={() => (deleteMode = !deleteMode)}
+      >{deleteMode ? "Entfernen beenden" : "einzelne Spiele entfernen"}</button
+    >
+  {/if}
 
-<hr />
+  <hr />
+{/if}
 
 {#if $matchList.length > 0}
   <div class="d-none d-md-block">
@@ -74,7 +78,9 @@
   {#each $matchList as match, index (`match-${index}`)}
     <li
       class="list-group-item pt-2"
-      class:bg-danger={match.Team1Id === match.Team2Id}
+      class:bg-danger={match.Team1Id === match.Team2Id ||
+        match.Team1Id === undefined ||
+        match.Team2Id === undefined}
       class:bg-warning={editMode && duplicateMatches.includes(match.Id)}
     >
       <div class="row">
@@ -84,19 +90,25 @@
               <div class="col-1">{index + 1}.</div>
               <div class="col">
                 {#if !editMode}
-                  {getTeamNameById(match.Team1Id) === ""
+                  {getTeamNameById(match.Team1Id) === "" || !match.Team1Id
                     ? "[Bitte Teamname eingeben]"
                     : getTeamNameById(match.Team1Id)}
                 {:else}
                   <select
                     on:change={(e) =>
                       (match.Team1Id = $teamList.find(
-                        (team) => team.Name === e.currentTarget.value
+                        (team) => team.Id === e.currentTarget.value
                       ).Id)}
                   >
+                    <option
+                      value={undefined}
+                      disabled
+                      selected={match.Team1Id === undefined}>Team wählen</option
+                    >
                     {#each $teamList as team}
                       <option
                         selected={getTeamNameById(match.Team1Id) === team.Name}
+                        value={team.Id}
                         >{team.Name !== ""
                           ? team.Name
                           : "Bitte Teamname eingeben"}</option
@@ -121,7 +133,7 @@
                   <span>-</span>
                 {/if}
                 {#if !editMode}
-                  {getTeamNameById(match.Team2Id) === ""
+                  {getTeamNameById(match.Team2Id) === "" || !match.Team2Id
                     ? "[Bitte Teamname eingeben]"
                     : getTeamNameById(match.Team2Id)}
                 {:else}
@@ -131,6 +143,11 @@
                         (team) => team.Name === e.currentTarget.value
                       ).Id)}
                   >
+                    <option
+                      value={undefined}
+                      disabled
+                      selected={match.Team2Id === undefined}>Team wählen</option
+                    >
                     {#each $teamList as team}
                       <option
                         selected={getTeamNameById(match.Team2Id) === team.Name}
@@ -213,6 +230,11 @@
     <p>Noch keine Spiele - füge Mannschaften hinzu um welche zu generieren.</p>
   {/each}
 </div>
+<button
+  class="btn btn-primary w-100 mt-3"
+  on:click={() => ($matchList = [...$matchList, new Match()])}
+  ><i class="bi bi-plus-circle" /> Neue Begegnung</button
+>
 
 <style>
   .pgRow {
