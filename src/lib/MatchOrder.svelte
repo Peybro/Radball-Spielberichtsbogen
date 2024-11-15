@@ -230,11 +230,13 @@
     <p>Noch keine Spiele - füge Mannschaften hinzu um welche zu generieren.</p>
   {/each}
 </div>
-<button
-  class="btn btn-primary w-100 mt-3"
-  on:click={() => ($matchList = [...$matchList, new Match()])}
-  ><i class="bi bi-plus-circle" /> Neue Begegnung</button
->
+{#if editMode}
+  <button
+    class="btn btn-primary w-100 mt-3"
+    on:click={() => ($matchList = [...$matchList, new Match()])}
+    ><i class="bi bi-plus-circle" /> Neue Begegnung</button
+  >
+{/if}
 
 <style>
   .pgRow {

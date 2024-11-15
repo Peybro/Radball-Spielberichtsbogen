@@ -22,7 +22,6 @@
     bigTableLiga,
   } from "./stores/contentStore";
   import Offcanvas from "./lib/Offcanvas.svelte";
-  import Navigation from "./lib/Navigation.svelte";
   import BigTable from "./lib/BigTable.svelte";
   import ShareButton from "./lib/ShareButton.svelte";
 
@@ -91,7 +90,26 @@
       $matchList = [...$matchList, newMatch];
     });
   }
+
+  let tabTitle = "";
+  $: {
+    const tryToGetNumber = $metaInfo.title
+      .split(". Spieltag")[0]
+      .split("")
+      .at(-1);
+    if (tryToGetNumber && !isNaN(parseInt(tryToGetNumber))) {
+      tabTitle = `${tryToGetNumber}. Spieltag - ${
+        $metaInfo.title.split(" - ")[0] || ""
+      }`;
+    } else {
+      tabTitle = "Spielberichtsbogen";
+    }
+  }
 </script>
+
+<svelte:head>
+  <title>{tabTitle}</title>
+</svelte:head>
 
 <svelte:window
   on:beforeunload={(event) => {
