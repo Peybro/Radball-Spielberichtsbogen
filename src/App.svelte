@@ -90,25 +90,15 @@
       $matchList = [...$matchList, newMatch];
     });
   }
-
-  let tabTitle = "";
-  $: {
-    const tryToGetNumber = $metaInfo.title
-      .split(". Spieltag")[0]
-      .split("")
-      .at(-1);
-    if (tryToGetNumber && !isNaN(parseInt(tryToGetNumber))) {
-      tabTitle = `${tryToGetNumber}. Spieltag - ${
-        $metaInfo.title.split(" - ")[0] || ""
-      }`;
-    } else {
-      tabTitle = "Spielberichtsbogen";
-    }
-  }
 </script>
 
 <svelte:head>
-  <title>{tabTitle}</title>
+  <title>{$metaInfo.title || "Spielberichtsbogen"}</title>
+  <meta
+    name="description"
+    content={$metaInfo.location ||
+      "Eine Web-App für die Erstellung von Spielberichtsbögen für Radball."}
+  />
 </svelte:head>
 
 <svelte:window
